@@ -5,3 +5,6 @@
 
 
 config files for awesome wm.
+
+add some keybindings and widgets.
+add some autostart programs.
