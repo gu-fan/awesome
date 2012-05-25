@@ -260,30 +260,6 @@ for s = 1, screen.count() do
         layout = awful.widget.layout.horizontal.rightleft
     }
 
-    --local widgets_front = {
-    --    {
-    --        mylauncher,
-    --        mytaglist[s],
-    --        mypromptbox[s],
-    --        layout = awful.widget.layout.horizontal.leftright
-    --    },
-    --    mylayoutbox[s],
-    --}
-    --local widgets_middle = {}
-    --for delightful_container_index, delightful_container_data in pairs(delightful_container.widgets) do
-    --    for widget_index, widget_data in pairs(delightful_container_data) do
-    --        table.insert(widgets_middle, widget_data)
-    --        if delightful_container.icons[delightful_container_index] and delightful_container.icons[delightful_container_index][widget_index] then
-    --            table.insert(widgets_middle, delightful_container.icons[delightful_container_index][widget_index])
-    --        end
-    --    end
-    --end
-    --local widgets_end = {
-    --    s == 1 and mysystray or nil,
-    --    mytasklist[s],
-    --    layout = awful.widget.layout.horizontal.rightleft
-    --}
-    --mywibox[s].widgets = awful.util.table.join(widgets_front, widgets_middle, widgets_end)
 end
 -- }}}
 
