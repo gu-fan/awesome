@@ -1,6 +1,6 @@
 .. README.rst                                 
 .. Create: 2012-05-25
-.. Update: 2012-05-25
+.. Update: 2012-05-26
 
 
 INTRO
@@ -14,12 +14,14 @@ config file for awesome wm
         - Mod4+Page_Up / Page_Down : Volumne control (with pamixer)
         - Mod4+Home / End  : mpc  prev / next
         - Mod4+inset / delete : mpc  toggle /  volumne toggle
-        - Mod4+Shift+Left /Right : move client to next/prev tag.
+        - Mod4+Shift+Left(P) /Right(N) : move client to next/prev tag.
 
     some widgets (vicious)
 
         - Volume
+           add volume control
         - Mpd 
+            add lyric showing (with mpdlyrics)
         - CPU
         - Uptime
 
