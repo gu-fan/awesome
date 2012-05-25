@@ -12,7 +12,7 @@ awesome wm config files
     add some autostart programs.
 
 to config gtk-app themes and icons 
-    see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps#Initial_Setup
+    see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
 
 also
     see https://wiki.archlinux.org/index.php/Awesome
