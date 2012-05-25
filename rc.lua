@@ -273,7 +273,8 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ }, "Print", function () exec("scrot -e 'mv $f ~/Documents/Pictures/screenshots/ 2>/dev/null'") end),
+    awful.key({ }, "Print", function () exec("shutter -f") end),
+    awful.key({"Mod1" }, "Print", function () exec("shutter -w") end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey, "Shift"   }, "Left",  
                 function ()
