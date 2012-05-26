@@ -27,7 +27,7 @@ config file for awesome wm
 
     some autostart programs.
 
-    some app in menu.
+    some app in menu and shutdown/rebooot(need exec ck-lauch-session in .xinitrc) .
 
 * theme.lua
     changed some color setting and border width.

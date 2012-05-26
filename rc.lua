@@ -13,6 +13,60 @@ require('vicious')
 
 local sexec = awful.util.spawn_with_shell
 local exec = awful.util.spawn
+
+-- {{{ functions
+
+function rel_movetag(n) --{{{
+    local screen = screen
+    local scr = mouse.screen
+    local query_tag  = awful.tag.selected()
+    for i, t in ipairs(screen[query_tag.screen]:tags()) do
+        if t == query_tag then
+            if tags[scr][i+n] then
+                awful.client.movetotag(tags[scr][i+n])
+                awful.tag.viewidx(n)
+            end
+            break
+        end
+    end
+end --}}}
+function dbg(vars)
+    local text = ""
+    for i=1, #vars do text = text .. vars[i] .. " | " end
+    naughty.notify({ text = text, timeout = 0 })
+end
+function icon (name)
+    return "/usr/share/icons/Faenza/apps/32/"..name..".png"
+end
+background_timers = {}                                                             
+                                                                                  
+function run_background(cmd,funtocall)                                             
+   local r = io.popen("mktemp")                                                   
+   local logfile = r:read("*line")                                                
+   r:close()                                                                      
+                                                                                  
+   cmdstr = cmd .. " &> " .. logfile .. " & "                                     
+   local cmdf = io.popen(cmdstr)                                                  
+   cmdf:close()                                                                   
+   background_timers[cmd] = {                                                     
+       file  = logfile,                                                           
+       timer = timer{timeout=1}                                                   
+   }                                                                              
+   background_timers[cmd].timer:add_signal("timeout",function()                   
+       local cmdf = io.popen("pgrep -f '" .. cmd .. "'")                          
+       local s = cmdf:read("*all")                                                
+       cmdf:close()                                                               
+       if (s=="") then                                                            
+           background_timers[cmd].timer:stop()                                    
+           local lf = io.open(background_timers[cmd].file)                        
+           funtocall(lf:read("*all"))                                             
+           lf:close()
+           io.popen("rm " .. background_timers[cmd].file)                                                            
+       end                                                                        
+   end)                                                                           
+   background_timers[cmd].timer:start()                                           
+end
+-- }}}
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -35,11 +89,6 @@ do
                          text = err })
         in_error = false
     end)
-end
-function dbg(vars)
-    local text = ""
-    for i=1, #vars do text = text .. vars[i] .. " | " end
-    naughty.notify({ text = text, timeout = 0 })
 end
 -- }}}
 -- {{{ Variable definitions
@@ -96,25 +145,27 @@ myawesomemenu = {
    { "&restart", awesome.restart },
    { "&quit", awesome.quit },
    { "---------", " " },
-   { "re&boot", "gksudo reboot" },
-   { "sh&utdown", "gksudo halt" },
+   { "re&boot", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart' },
+   --{ "sh&utdown", "gksudo halt" },
+   { "sh&utdown", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' },
 }
 myappmenu = {
-    { "&chrome", "google-chrome"},
+    { "&chrome", "google-chrome",icon("google-chrome")},
     { "&deluge", "deluge"},
     { "&easystroke", "easystroke"},
-    { "&firefox", "firefox"},
-    { "&gvim", editor_cmd },
-    { "go&ldendict", "goldendict"},
-    { "&nautilus", "nautilus"},
+    { "&firefox", "firefox",icon("firefox")},
+    { "&gvim", editor_cmd , icon("gvim")},
+    { "goldendict", "goldendict"},
+    { "&libreoffice", "libreoffice", icon("libreoffice-base")},
+    { "&nautilus", "nautilus",icon("nautilus")},
     { "&osdlyrics", "osdlyrics"},
-    { "&shutter", "shutter"},
-    { "&terminal", terminal },
+    { "&shutter", "shutter",icon("shutter")},
+    { "&terminal", terminal ,icon("terminal")},
     { "&xchat", "xchat"},
 }
 mymainmenu = awful.menu({ items = { { "&system", myawesomemenu, beautiful.awesome_icon },
-                                    { "&apps", myappmenu},
                                     { "----------", " "},
+                                    { "&apps", myappmenu},
                                   }
                         })
 
@@ -174,8 +225,8 @@ function (widget ,args)
 end)
 -- }}}
 -- {{{ CPU temperature
-local thermalwidget = widget({ type = "textbox" })
-vicious.register(thermalwidget, vicious.widgets.thermal,  span("T:")  .. " $1°C", 20, "thermal_zone0")
+--local thermalwidget = widget({ type = "textbox" })
+--vicious.register(thermalwidget, vicious.widgets.thermal,  span("T:")  .. " $1°C", 20, "thermal_zone0")
 -- }}}
 -- {{{ Volume widget
 local volwidget = widget({ type = "textbox" })
@@ -192,51 +243,22 @@ volwidget:buttons(awful.util.table.join(
 -- {{{ Uptime
 uptimewidget = widget({ type = "textbox" })
 vicious.register(uptimewidget, vicious.widgets.uptime,
-function (widget, args)
-    return string.format(span("⟳").." %02d:%02d ", args[2], args[3])
-end, 61)
+        function (widget, args)
+            return string.format(span("⟳").." %02d:%02d ", args[2], args[3])
+        end, 61)
 --}}}
 -- {{{ mpd
 -- Initialize widget
 local mpdwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(mpdwidget, vicious.widgets.mpd,
-    function (widget, args)
-        if args["{state}"] == "Stop"  then 
-            return span("■") 
-        else 
-            return span("▶")   .. args["{Artist}"]..' - '.. args["{Title}"]
-        end
-    end
-                ,10)
-background_timers = {}                                                             
-                                                                                  
-function run_background(cmd,funtocall)                                             
-   local r = io.popen("mktemp")                                                   
-   local logfile = r:read("*line")                                                
-   r:close()                                                                      
-                                                                                  
-   cmdstr = cmd .. " &> " .. logfile .. " & "                                     
-   local cmdf = io.popen(cmdstr)                                                  
-   cmdf:close()                                                                   
-   background_timers[cmd] = {                                                     
-       file  = logfile,                                                           
-       timer = timer{timeout=1}                                                   
-   }                                                                              
-   background_timers[cmd].timer:add_signal("timeout",function()                   
-       local cmdf = io.popen("pgrep -f '" .. cmd .. "'")                          
-       local s = cmdf:read("*all")                                                
-       cmdf:close()                                                               
-       if (s=="") then                                                            
-           background_timers[cmd].timer:stop()                                    
-           local lf = io.open(background_timers[cmd].file)                        
-           funtocall(lf:read("*all"))                                             
-           lf:close()
-           io.popen("rm " .. background_timers[cmd].file)                                                            
-       end                                                                        
-   end)                                                                           
-   background_timers[cmd].timer:start()                                           
-end
+        function (widget, args)
+            if args["{state}"] == "Stop"  then 
+                return span("■") 
+            else 
+                return span("▸")   .. args["{Artist}"]..' - '.. args["{Title}"]
+            end
+        end ,10)
 local lyric = nil
  
 function remove_lyric()
@@ -272,7 +294,7 @@ local netwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(netwidget, vicious.widgets.net,
     function (widget, args)
-        return span("▽")  .. string.format("%05.1f",args["{eth0 down_kb}"]) .. span("△")  .. string.format("%05.1f",args["{eth0 up_kb}"])
+        return span("▾")  .. string.format("%05.1f",args["{eth0 down_kb}"]) .. span("▴")  .. string.format("%05.1f",args["{eth0 up_kb}"])
     end )
 --}}}
 -- Create a systray
@@ -375,20 +397,6 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
-function rel_movetag(n) --{{{
-    local screen = screen
-    local scr = mouse.screen
-    local query_tag  = awful.tag.selected()
-    for i, t in ipairs(screen[query_tag.screen]:tags()) do
-        if t == query_tag then
-            if tags[scr][i+n] then
-                awful.client.movetotag(tags[scr][i+n])
-                awful.tag.viewidx(n)
-            end
-            break
-        end
-    end
-end --}}}
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ }, "Print", function () exec("shutter -f") end),
