@@ -10,12 +10,10 @@ require("beautiful")
 require("naughty")
 require('vicious')
 
+-- {{{ Functions
 
 local sexec = awful.util.spawn_with_shell
 local exec = awful.util.spawn
-
--- {{{ functions
-
 function rel_movetag(n) --{{{
     local screen = screen
     local scr = mouse.screen
@@ -67,6 +65,7 @@ function run_background(cmd,funtocall)
    background_timers[cmd].timer:start()                                           
 end
 -- }}}
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -91,6 +90,7 @@ do
     end)
 end
 -- }}}
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
@@ -133,7 +133,7 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[2])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[8])
 end
 -- }}}
 
@@ -158,10 +158,13 @@ myappmenu = {
     { "goldendict", "goldendict"},
     { "&libreoffice", "libreoffice", icon("libreoffice-base")},
     { "&nautilus", "nautilus",icon("nautilus")},
-    { "&osdlyrics", "osdlyrics"},
+    { "osdlyrics", "osdlyrics"},
     { "&shutter", "shutter",icon("shutter")},
     { "&terminal", terminal ,icon("terminal")},
     { "&xchat", "xchat"},
+    { "subl", "subl"},
+    { "gimp", "gimp"},
+    { "mypaint", "mypaint"},
 }
 mymainmenu = awful.menu({ items = { { "&system", myawesomemenu, beautiful.awesome_icon },
                                     { "----------", " "},
@@ -251,6 +254,7 @@ vicious.register(uptimewidget, vicious.widgets.uptime,
 -- Initialize widget
 local mpdwidget = widget({ type = "textbox" })
 -- Register widget
+-- FIXME: it could not catch the pause state
 vicious.register(mpdwidget, vicious.widgets.mpd,
         function (widget, args)
             if args["{state}"] == "Stop"  then 
@@ -361,7 +365,7 @@ for s = 1, screen.count() do
 
     -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(function(c)
-                                                return awful.widget.tasklist.label.currenttags(c, s)
+                            return awful.widget.tasklist.label.currenttags(c, s)
                                           end, mytasklist.buttons)
 
     -- Create the wibox
@@ -416,7 +420,6 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "End",    function() sexec("mpc next")   end),
     awful.key({ modkey,           }, "Insert", function() sexec("mpc toggle")   end),   
     awful.key({ modkey,           }, "Delete", function() sexec("pamixer --toggle-mute") end),
-    awful.key({ modkey,           }, "g",      function() sexec("gvim") end),
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
@@ -454,8 +457,12 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-    awful.key({ modkey,           }, "KP_Enter", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "F1", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "F2", function () exec("gvim") end),
+    awful.key({ modkey,           }, "F3", function () exec("firefox") end),
+    awful.key({ modkey,           }, "F4", add_lyric ),
+    awful.key({ modkey, "Shift"   }, "F4", remove_lyric ),
+    awful.key({ modkey,           }, "F8", function () exec("nautilus") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -465,39 +472,40 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
-    awful.key({ modkey,           }, "Up", function () awful.layout.inc(layouts,  1) end),
-    awful.key({ modkey,           }, "Down", function () awful.layout.inc(layouts, -1) end),
+    awful.key({ modkey,           }, "Down",  function () awful.layout.inc(layouts,  1) end),
+    awful.key({ modkey,           }, "Up",    function () awful.layout.inc(layouts, -1) end),
 
-    awful.key({ modkey, "Control" }, "i", awful.client.restore),
+    awful.key({ modkey, "Control" }, "`", awful.client.restore)
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    --awful.key({ modkey, "Shift"   }, "r",     function () mypromptbox[mouse.screen]:run() end)
 
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run({ prompt = "Run Lua code: " },
-                  mypromptbox[mouse.screen].widget,
-                  awful.util.eval, nil,
-                  awful.util.getdir("cache") .. "/history_eval")
-              end)
+    --awful.key({ modkey }, "x",
+    --          function ()
+    --              awful.prompt.run({ prompt = "Run Lua code: " },
+    --              mypromptbox[mouse.screen].widget,
+    --              awful.util.eval, nil,
+    --              awful.util.getdir("cache") .. "/history_eval")
+    --          end)
 )
 
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey,           }, "q",      function (c) c:kill()                         end),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+    awful.key({ modkey,           }, "f",      awful.client.floating.toggle                     ),
+    awful.key({ modkey,           }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+    awful.key({ modkey,           }, "KP_Enter", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-    awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
+    awful.key({ modkey,           }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
-    awful.key({ modkey,           }, "i",
+    awful.key({ modkey,           }, "`",
         function (c)
             -- The client currently has the input focus, so it cannot be
             -- minimized, since minimized clients can't have the focus.
             c.minimized = true
         end),
-    awful.key({ modkey,           }, "m",
+    awful.key({ modkey, "Control" }, "space",  function (c) c.fullscreen = not c.fullscreen  end),
+    awful.key({ modkey,           }, "space",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
@@ -562,6 +570,8 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
     { rule = { class = "MPlayer" },
+      properties = { floating = true } },
+    { rule = { class = "Plugin-Container" },
       properties = { floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
