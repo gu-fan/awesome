@@ -33,8 +33,9 @@ function dbg(vars)
     for i=1, #vars do text = text .. vars[i] .. " | " end
     naughty.notify({ text = text, timeout = 0 })
 end
-function icon (name)
-    return "/usr/share/icons/Faenza/apps/32/"..name..".png"
+function icon (name,category)
+    local category = category or "apps"
+    return "/usr/share/icons/Faenza/".. category .."/32/"..name..".png"
 end
 background_timers = {}                                                             
                                                                                   
@@ -145,26 +146,30 @@ myawesomemenu = {
    { "&restart", awesome.restart },
    { "&quit", awesome.quit },
    { "---------", " " },
-   { "re&boot", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart' },
+   { "sus&pend", 'dbus-send --system --print-reply --dest="org.freedesktop.DeviceKit.Power" /org/freedesktop/DeviceKit/Power org.freedesktop.DeviceKit.Power.Suspend' },
+   { "re&boot", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart' ,  icon("system-log-out","actions")},
    --{ "sh&utdown", "gksudo halt" },
-   { "sh&utdown", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' },
+   { "sh&utdown", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' ,  icon("system-shutdown","actions")},
+   --hibernate
+   --dbus-send --system --print-reply --dest="org.freedesktop.DeviceKit.Power" /org/freedesktop/DeviceKit/Power org.freedesktop.DeviceKit.Power.Hibernate
+   -- suspend
 }
 myappmenu = {
-    { "&chrome", "google-chrome",icon("google-chrome")},
-    { "&deluge", "deluge"},
-    { "&easystroke", "easystroke"},
-    { "&firefox", "firefox",icon("firefox")},
-    { "&gvim", editor_cmd , icon("gvim")},
-    { "goldendict", "goldendict"},
-    { "&libreoffice", "libreoffice", icon("libreoffice-base")},
-    { "&nautilus", "nautilus",icon("nautilus")},
-    { "osdlyrics", "osdlyrics"},
-    { "&shutter", "shutter",icon("shutter")},
-    { "&terminal", terminal ,icon("terminal")},
-    { "&xchat", "xchat"},
-    { "subl", "subl"},
-    { "gimp", "gimp"},
-    { "mypaint", "mypaint"},
+    { "&chrome"      , "google-chrome", icon("google-chrome")},
+    { "&deluge"      , "deluge"      },
+    { "&easystroke"  , "easystroke"  },
+    { "&firefox"     , "firefox"      ,  icon("firefox")},
+    { "&gvim"        ,  editor_cmd    ,  icon("gvim")},
+    { "goldendict"   , "goldendict"  },
+    { "&libreoffice" , "libreoffice"  ,  icon("libreoffice-base")},
+    { "&nautilus"    , "nautilus"     ,  icon("nautilus")},
+    { "osdlyrics"    , "osdlyrics"   },
+    { "&shutter"     , "shutter"      ,  icon("shutter")},
+    { "&terminal"    ,  terminal      ,  icon("terminal")},
+    { "&xchat"       , "xchat"       },
+    { "subl"         , "subl"        },
+    { "gimp"         , "gimp"        },
+    { "mypaint"      , "mypaint"     },
 }
 mymainmenu = awful.menu({ items = { { "&system", myawesomemenu, beautiful.awesome_icon },
                                     { "----------", " "},
