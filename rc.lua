@@ -146,11 +146,12 @@ myawesomemenu = {
    { "&restart", awesome.restart },
    { "&quit", awesome.quit },
    { "---------", " " },
-   { "sus&pend", 'dbus-send --system --print-reply --dest="org.freedesktop.DeviceKit.Power" /org/freedesktop/DeviceKit/Power org.freedesktop.DeviceKit.Power.Suspend' },
+   { "sus&pend", 'dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend' },
    { "re&boot", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart' ,  icon("system-log-out","actions")},
    --{ "sh&utdown", "gksudo halt" },
    { "sh&utdown", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' ,  icon("system-shutdown","actions")},
    --hibernate
+   { "hibernate", 'dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate' },
    --dbus-send --system --print-reply --dest="org.freedesktop.DeviceKit.Power" /org/freedesktop/DeviceKit/Power org.freedesktop.DeviceKit.Power.Hibernate
    -- suspend
 }
@@ -166,6 +167,7 @@ myappmenu = {
     { "osdlyrics"    , "osdlyrics"   },
     { "&shutter"     , "shutter"      ,  icon("shutter")},
     { "&terminal"    ,  terminal      ,  icon("terminal")},
+    { "&virtualbox"  , "virtualbox"  },
     { "&xchat"       , "xchat"       },
     { "subl"         , "subl"        },
     { "gimp"         , "gimp"        },
@@ -576,7 +578,7 @@ awful.rules.rules = {
                      buttons = clientbuttons } },
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
-    { rule = { class = "Plugin-Container" },
+    { rule = { instance = "plugin-container" },
       properties = { floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
@@ -631,10 +633,13 @@ do
         "dropboxd",
         "fcitx -r",
         "synapse",
+        -- for automount usb disk
+        "udiskie"
     }
 
-    for _,i in pairs(cmds) do
-        awful.util.spawn(i)
+    for _,prg in pairs(cmds) do
+        awful.util.spawn_with_shell("pgrep -u $USER -x " .. prg .. " || (" .. prg .. ")")
+        --awful.util.spawn(i)
     end
 end
 -- }}}
