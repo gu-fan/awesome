@@ -74,4 +74,4 @@ USE IT
     - gtk-app themes and icons 
         see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
 
-    - usb automounting , install udiskie package and add it when startup.
+    - usb automounting , install ``udiskie`` package and add it when startup.
