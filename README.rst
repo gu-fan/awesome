@@ -30,10 +30,9 @@ config file for awesome wm
         - Mod4+r :redraw client
         - Mod4+q :close client
         - Mod4+F1~F12: lauch apps
-
-        * Removed maps:
-          - Mod4 + x
-          - Mod4 + m
+        - Removed maps:
+            * Mod4 + x
+            * Mod4 + m
 
     some widgets (need ``vicious``) showing tooltips.
 
