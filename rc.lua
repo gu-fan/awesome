@@ -722,6 +722,7 @@ client.add_signal("unfocus", function(c)
                                 --c.opacity = 1
                              end)
 -- }}}
+
 -- {{{ autosart
 do
     local cmds = 
@@ -731,7 +732,8 @@ do
         "easystroke",
         "dropboxd",
         "synapse",
-        "xcompmgr",
+        -- for transparency
+        --"xcompmgr",
         -- for automount usb disk
         "udiskie"
     }
