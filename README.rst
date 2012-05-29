@@ -64,3 +64,9 @@ config file for awesome wm
         see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
 
     - usb automounting , install udiskie package and add it when startup.
+
+USE IT
+======
+
+`git clone git://github.com/Rykka/awesome.git ~/.config/awesome`
+
