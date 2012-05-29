@@ -11,14 +11,14 @@ config file for awesome wm
 * rc.lua
     basic setting
 
-        - terminal : urxvt
+        - terminal : ``urxvt``
         - editor   : gvim
         - wallpaper: ignored. set it in your .xinitrc
         - ModKey   : "Mod4"(Win Key)
     
     some keybindings
 
-        - Mod4+Page_Up / Page_Down : Volumne control (with pamixer)
+        - Mod4+Page_Up / Page_Down : Volumne control (need ``pamixer``)
         - Mod4+Home / End  : mpc  prev / next
         - Mod4+inset / delete : mpc  toggle /  volumne toggle
         - Mod4+Shift+Left(P) /Right(N) : move client to next/prev tag.
@@ -32,12 +32,12 @@ config file for awesome wm
         - Alt+F4 :close client
         - Mod4+F1~F12: lauch apps
 
-    some widgets (need vicious) showing tooltips.
+    some widgets (need ``vicious``) showing tooltips.
 
         - Volume
             add volume control: scroll-down/up(vol decrease/increase)
         - Mpd 
-            add mpd control and lyric showing (with mpdlyrics)
+            add mpd control and lyric showing (need ``mpdlyrics``)
                 scroll-down/up(next/prev)
                 left-click(lyric)
                 right-click(toggle)
@@ -49,11 +49,11 @@ config file for awesome wm
 
     some autostart programs.
 
-    some app in menu. (using Faenza icon set)
+    some app in menu. (using ``Faenza`` icon set)
 
     
     add shutdown/rebooot/suspend/hibernate in menu
-    (need dbus and exec ck-lauch-session in .xinitrc)
+    (need ``dbus`` and ``exec ck-lauch-session`` in .xinitrc)
 
 * theme.lua
     changed some color setting and border width.
