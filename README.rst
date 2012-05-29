@@ -14,6 +14,7 @@ config file for awesome wm
         - terminal : urxvt
         - editor   : gvim
         - wallpaper: ignored. set it in your .xinitrc
+        - ModKey   : "Mod4"(Win Key)
     
     some keybindings
 
