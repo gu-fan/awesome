@@ -37,11 +37,11 @@ config file for awesome wm
     some widgets (need ``vicious``) showing tooltips.
 
         - Volume:add volume control 
-            scroll-down/up(vol decrease/increase)
+            - scroll-down/up(vol decrease/increase)
         - Mpd: add mpd control and lyric showing (need ``mpdlyrics``)
-            scroll-down/up(next/prev)
-            left-click(lyric)
-            right-click(toggle)
+            - scroll-down/up(next/prev)
+            - left-click(lyric)
+            - right-click(toggle)
         - CPU:show CPU details in tooltip
         - Mem:show Mem details in tooltip
         - Uptime
