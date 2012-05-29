@@ -6,7 +6,7 @@
 INTRO
 =====
 
-this is config files for awesome wm (on ArchLinux)
+This is config files for awesome wm (on ArchLinux)
 
 * rc.lua
     basic setting
