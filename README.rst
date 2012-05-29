@@ -61,6 +61,7 @@ USE IT
 ======
 
 * install::
+
    git clone git://github.com/Rykka/awesome.git ~/.config/awesome
    cd ~/.config/awesome
    git submodule init
