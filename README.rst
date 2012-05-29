@@ -62,10 +62,10 @@ USE IT
 
 * install
 
-    git clone git://github.com/Rykka/awesome.git ~/.config/awesome
-    cd ~/.config/awesome
-    git submodule init
-    git submodule update
+   | git clone git://github.com/Rykka/awesome.git ~/.config/awesome
+   | cd ~/.config/awesome
+   | git submodule init
+   | git submodule update
 
 
 * more settings
