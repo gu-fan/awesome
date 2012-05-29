@@ -25,9 +25,9 @@ This is config files for awesome wm (on ArchLinux)
         - Mod4 + Shift + Left(P)/Right(N) : move client to next/prev tag.
         - Mod4 + `   : Minimize
         - Mod4 + Ctrl+`   : UnMinimize
-        - Mod4 + Space: Maxmize
-        - Mod4 + Ctrl+Space :FullScreen
-        - Mod4 + f :Float client
+        - Mod4 + Space: Maxmize Toggle
+        - Mod4 + Ctrl+Space :FullScreen Toggle
+        - Mod4 + f :Floating client Toggle
         - Mod4 + r :redraw client
         - Mod4 + q :close client
         - Mod4 + F1~F12: lauch apps
