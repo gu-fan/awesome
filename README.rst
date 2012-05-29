@@ -35,7 +35,7 @@ This is config files for awesome wm (on ArchLinux)
             * Mod4 + x
             * Mod4 + m
 
-    some widgets (need ``vicious``) showing tooltips.
+    some widgets (need the awesome submodule ``vicious``) showing tooltips.
 
         - Volume:add volume control 
             - scroll-down/up(vol decrease/increase)
