@@ -60,7 +60,14 @@ config file for awesome wm
 USE IT
 ======
 
-``git clone git://github.com/Rykka/awesome.git ~/.config/awesome``
+* install
+
+.. code:: bash
+
+    git clone git://github.com/Rykka/awesome.git ~/.config/awesome
+    cd ~/.config/awesome
+    git submodule init
+    git submodule update
 
 
 * more settings
