@@ -15,13 +15,19 @@ config file for awesome wm
         - Mod4+Home / End  : mpc  prev / next
         - Mod4+inset / delete : mpc  toggle /  volumne toggle
         - Mod4+Shift+Left(P) /Right(N) : move client to next/prev tag.
+        - Mod4+`   : Minimize
+        - Mod4+Ctrl+`   : UnMinimize
+        - Mod4+Space: Maxmize
+        - Mod4+Ctrl+Space :FullScreen
+        - Mod4+f :Float client
+        - Mod4+F1~F12: lauch apps
 
     some widgets (vicious)
 
         - Volume
            add volume control
         - Mpd 
-            add lyric showing (with mpdlyrics)
+           add mpd control and lyric showing (with mpdlyrics)
         - CPU
         - Uptime
 
