@@ -27,7 +27,7 @@ config file for awesome wm
         - Volume
            add volume control: scroll-down/up(vol decrease/increase)
         - Mpd 
-           - add mpd control and lyric showing (with mpdlyrics)
+           add mpd control and lyric showing (with mpdlyrics)
                 scroll-down/up(next/prev)
                 left-click(lyric)
                 right-click(toggle)
