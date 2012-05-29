@@ -1,6 +1,6 @@
 .. README.rst                                 
 .. Create: 2012-05-25
-.. Update: 2012-05-26
+.. Update: 2012-05-30
 
 
 INTRO
@@ -27,7 +27,10 @@ config file for awesome wm
 
     some autostart programs.
 
-    some app in menu and shutdown/rebooot(need exec ck-lauch-session in .xinitrc) .
+    some app in menu
+    
+    add shutdown/rebooot/suspend/hibernate in menu
+        (need dbus and exec ck-lauch-session in .xinitrc)
 
 * theme.lua
     changed some color setting and border width.
@@ -37,3 +40,4 @@ config file for awesome wm
 
 * and more
     see https://wiki.archlinux.org/index.php/Awesome
+    for usb automounting , install udiskie package

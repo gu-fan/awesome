@@ -147,13 +147,9 @@ myawesomemenu = {
    { "&quit", awesome.quit },
    { "---------", " " },
    { "sus&pend", 'dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend' },
-   { "re&boot", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart' ,  icon("system-log-out","actions")},
-   --{ "sh&utdown", "gksudo halt" },
-   { "sh&utdown", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' ,  icon("system-shutdown","actions")},
-   --hibernate
    { "hibernate", 'dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate' },
-   --dbus-send --system --print-reply --dest="org.freedesktop.DeviceKit.Power" /org/freedesktop/DeviceKit/Power org.freedesktop.DeviceKit.Power.Hibernate
-   -- suspend
+   { "re&boot", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart' ,  icon("system-log-out","actions")},
+   { "sh&utdown", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' ,  icon("system-shutdown","actions")},
 }
 myappmenu = {
     { "&chrome"      , "google-chrome", icon("google-chrome")},
@@ -181,6 +177,7 @@ mymainmenu = awful.menu({ items = { { "&system", myawesomemenu, beautiful.awesom
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
+
 -- }}}
 
 -- {{{ Wibox
@@ -231,7 +228,7 @@ mytextclock:add_signal("mouse::leave", remove_calendar)
 local cpuwidget = widget({ type = "textbox" })
 vicious.register(cpuwidget, vicious.widgets.cpu, 
 function (widget ,args)
-    return string.format(span("❖") .. "%02d-%02d-%02d-%02d",args[2],args[3],args[4],args[5])
+    return string.format(span("❖") .. "%2d-%2d-%2d-%2d",args[2],args[3],args[4],args[5])
 end)
 -- }}}
 -- {{{ CPU temperature
@@ -254,7 +251,7 @@ volwidget:buttons(awful.util.table.join(
 uptimewidget = widget({ type = "textbox" })
 vicious.register(uptimewidget, vicious.widgets.uptime,
         function (widget, args)
-            return string.format(span("⟳").." %02d:%02d ", args[2], args[3])
+            return string.format(span("⟳").." %2d:%2d ", args[2], args[3])
         end, 61)
 --}}}
 -- {{{ mpd
@@ -305,7 +302,7 @@ local netwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(netwidget, vicious.widgets.net,
     function (widget, args)
-        return span("▾")  .. string.format("%05.1f",args["{eth0 down_kb}"]) .. span("▴")  .. string.format("%05.1f",args["{eth0 up_kb}"])
+        return span("▾")  .. string.format("%5.1f",args["{eth0 down_kb}"]) .. span("▴")  .. string.format("%5.1f",args["{eth0 up_kb}"])
     end )
 --}}}
 -- Create a systray
@@ -619,10 +616,17 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+--client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+--client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("focus", function(c)
+                              c.border_color = beautiful.border_focus
+                              --c.opacity = 1
+                           end)
+client.add_signal("unfocus", function(c)
+                                c.border_color = beautiful.border_normal
+                                --c.opacity = 1
+                             end)
 -- }}}
-
 -- {{{ autosart
 do
     local cmds = 
@@ -631,8 +635,8 @@ do
         "mpd",
         "easystroke",
         "dropboxd",
-        "fcitx -r",
         "synapse",
+        "xcompmgr",
         -- for automount usb disk
         "udiskie"
     }
