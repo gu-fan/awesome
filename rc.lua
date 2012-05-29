@@ -300,15 +300,39 @@ end,
 -- Initialize widget
 local mpdwidget = widget({ type = "textbox" })
 -- Register widget
--- FIXME: it could not catch the pause state
+-- FIXED: 2012-05-30 it could not catch the pause state
 vicious.register(mpdwidget, vicious.widgets.mpd,
         function (widget, args)
             if args["{state}"] == "Stop"  then 
                 return span("■") 
             else 
-                return span("▸")   .. args["{Artist}"]..' - '.. args["{Title}"]
+                local cmdf = io.popen("mpc")
+                local txt = ""
+                if cmdf == nil then
+                    txt =  span("▸")   .. args["{Artist}"]..' - '.. args["{Title}"]
+                else
+                    local i = 1
+                    for line in cmdf:lines() do
+                        if i == 2 then
+                            for w in string.gmatch(line, "%[%a+%]") do
+                                if w == "[paused]" then
+                                    txt = span("❙❙")   .. args["{Artist}"]..' - '.. args["{Title}"]
+                                    break
+                                end
+                            end
+                        end
+                        i = i + 1
+                    end
+                end
+                cmdf:close()
+                if txt == "" then
+                    return span("▶")   .. args["{Artist}"]..' - '.. args["{Title}"]
+                else
+                    return txt
+                end
             end
-        end ,10)
+        end, 
+        10)
 local lyric = nil
  
 function remove_lyric()
@@ -330,12 +354,15 @@ mpdwidget:buttons(awful.util.table.join(
     awful.button({ }, 1, add_lyric),
     awful.button({ }, 3, function()
         sexec("mpc toggle")
+        vicious.force({ mpdwidget, })
     end),
     awful.button({ }, 4, function()
         sexec("mpc prev")
+        vicious.force({ mpdwidget, })
     end),
     awful.button({ }, 5, function()
         sexec("mpc next")
+        vicious.force({ mpdwidget, })
     end)
 ))
 
@@ -351,7 +378,7 @@ local netwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(netwidget, vicious.widgets.net,
     function (widget, args)
-        return span("▾")  .. string.format("%5.1f",args["{eth0 down_kb}"]) .. span("▴")  .. string.format("%5.1f",args["{eth0 up_kb}"])
+        return span("▼")  .. string.format("%5.1f",args["{eth0 down_kb}"]) .. span("▲")  .. string.format("%5.1f",args["{eth0 up_kb}"])
     end )
 
 local netwidget_t  = awful.tooltip({
@@ -478,9 +505,16 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Escape",  awful.tag.history.restore),
     awful.key({ modkey,           }, "Page_Up",   function() sexec("pamixer --increase 4") end),   
     awful.key({ modkey,           }, "Page_Down", function() sexec("pamixer --decrease 4") end),
-    awful.key({ modkey,           }, "Home",   function() sexec("mpc prev")   end),   
-    awful.key({ modkey,           }, "End",    function() sexec("mpc next")   end),
-    awful.key({ modkey,           }, "Insert", function() sexec("mpc toggle")   end),   
+    awful.key({ modkey,           }, "Home",   function() sexec("mpc prev") 
+        vicious.force({ mpdwidget, })
+    end),   
+    awful.key({ modkey,           }, "End",    function() sexec("mpc next")  
+            vicious.force({ mpdwidget, })
+    end),
+    awful.key({ modkey,           }, "Insert", function() 
+        sexec("mpc toggle")  
+        vicious.force({ mpdwidget, })
+    end),   
     awful.key({ modkey,           }, "Delete", function() sexec("pamixer --toggle-mute") end),
     awful.key({ modkey,           }, "j",
         function ()
@@ -524,6 +558,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "F3", function () exec("firefox") end),
     awful.key({ modkey,           }, "F4", add_lyric ),
     awful.key({ modkey, "Shift"   }, "F4", remove_lyric ),
+    awful.key({ modkey,           }, "F5", function () exec("google-chrome") end),
+    awful.key({ modkey,           }, "F6", function () exec("libreoffice") end),
+    awful.key({ modkey,           }, "F7", function () exec("gimp") end),
     awful.key({ modkey,           }, "F8", function () exec("nautilus") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
