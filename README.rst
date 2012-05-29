@@ -51,9 +51,8 @@ config file for awesome wm
 
     some app in menu. (using ``Faenza`` icon set)
 
-    
     add shutdown/rebooot/suspend/hibernate in menu
-    (need ``dbus`` and ``exec ck-lauch-session`` in .xinitrc)
+    (need ``dbus`` and ``consolekit``, also ``exec ck-launch-session``  in .xinitrc)
 
 * theme.lua
     changed some color setting and border width.
