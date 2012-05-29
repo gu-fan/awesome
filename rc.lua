@@ -309,14 +309,14 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
                 local cmdf = io.popen("mpc")
                 local txt = ""
                 if cmdf == nil then
-                    txt =  span("▸")   .. args["{Artist}"]..' - '.. args["{Title}"]
+                    txt =  span("▶ ")   .. args["{Artist}"]..' - '.. args["{Title}"]
                 else
                     local i = 1
                     for line in cmdf:lines() do
                         if i == 2 then
                             for w in string.gmatch(line, "%[%a+%]") do
                                 if w == "[paused]" then
-                                    txt = span("❙❙")   .. args["{Artist}"]..' - '.. args["{Title}"]
+                                    txt = span("❚❚")   .. args["{Artist}"]..' - '.. args["{Title}"]
                                     break
                                 end
                             end
@@ -326,7 +326,7 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
                 end
                 cmdf:close()
                 if txt == "" then
-                    return span("▶")   .. args["{Artist}"]..' - '.. args["{Title}"]
+                    return span("▶ ")   .. args["{Artist}"]..' - '.. args["{Title}"]
                 else
                     return txt
                 end
@@ -378,13 +378,15 @@ local netwidget = widget({ type = "textbox" })
 -- Register widget
 vicious.register(netwidget, vicious.widgets.net,
     function (widget, args)
-        return span("▼")  .. string.format("%5.1f",args["{eth0 down_kb}"]) .. span("▲")  .. string.format("%5.1f",args["{eth0 up_kb}"])
+        --return span("▼")  .. string.format("%5.1f",args["{eth0 down_kb}"]) .. span("▲")  .. string.format("%5.1f",args["{eth0 up_kb}"])
+        return span("▼")  .. string.format("%.1f",args["{eth0 down_kb}"])
     end )
 
 local netwidget_t  = awful.tooltip({
 objects = { netwidget },
 timer_function = function()
-return "Download/Upload Speed"
+    local args = vicious.widgets.net()
+    return string.format("Net Details:\nDown:\t%5.1fKB\nUp:\t%5.1fKB",args["{eth0 down_kb}"],args["{eth0 up_kb}"])
 end,
 })
 --}}}
