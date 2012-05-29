@@ -287,12 +287,13 @@ end,
 uptimewidget = widget({ type = "textbox" })
 vicious.register(uptimewidget, vicious.widgets.uptime,
         function (widget, args)
-            return string.format(span("⟳").." %2dd %2dh %2dm ", args[1], args[2], args[3])
+            return string.format(span("⟳").."%2dh %2dm ", args[1], args[2], args[3])
         end, 61)
 uptime_t  = awful.tooltip({
 objects = { uptimewidget },
 timer_function = function()
-return "Uptime"
+    local args = vicious.widgets.uptime()
+    return string.format("Uptime:\n %2dd %2dh %2dm ", args[1], args[2], args[3])
 end,
 })
 --}}}
