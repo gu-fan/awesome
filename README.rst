@@ -11,9 +11,9 @@ config file for awesome wm
 * rc.lua
     basic setting
 
-        - terminal : ``urxvt``
-        - editor   : gvim
-        - wallpaper: ignored. set it in your .xinitrc
+        - Terminal : ``urxvt``
+        - Editor   : gvim
+        - Wallpaper: ignored. set it in your .xinitrc
         - ModKey   : "Mod4"(Win Key)
         - Music Player : mpd  (need ``mpc``)
     
