@@ -72,7 +72,7 @@ USE IT
     see https://wiki.archlinux.org/index.php/Awesome
 
     - gtk-app themes and icons 
-      see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
+        see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
 
     - usb automounting 
-      install ``udiskie`` package and add to startup.
+        install ``udiskie`` package and add to startup.
