@@ -7,18 +7,18 @@ theme = {}
 theme.font          = "DejaVu Sans Mono 10"
 
 theme.bg_normal     = "#222222"
-theme.bg_focus      = "#5B777A"
+theme.bg_focus      = "#6A8A8F"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#055366"
 
 theme.fg_normal     = "#BFBFBF"
-theme.fg_focus      = "#ffffff"
+theme.fg_focus      = "#293332"
 theme.fg_urgent     = "#FFB38C"
 theme.fg_minimize   = "#5C92CC"
 
-theme.border_width  = "2"
+theme.border_width  = "3"
 theme.border_normal = "#000000"
-theme.border_focus  = "#FFAF4D"
+theme.border_focus  = "#5AE0DA"
 theme.border_marked = "#CC2A1F"
 
 -- There are other variable sets
@@ -29,7 +29,7 @@ theme.border_marked = "#CC2A1F"
 -- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
 -- mouse_finder_[color|timeout|animate_timeout|radius|factor]
 -- Example:
---theme.taglist_bg_focus = "#ff0000"
+theme.tasklist_bg_focus = "#5AE0DA"
 theme.tooltip_fg_color = "#323329"
 theme.tooltip_bg_color = "#FCFFCC"
 theme.tooltip_border_width = 1
