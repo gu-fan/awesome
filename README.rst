@@ -47,7 +47,7 @@ config file for awesome wm
         - Mem:show Mem details in tooltip
         - Uptime
 
-    some autostart programs.
+    some autostart programs. (last part of ``rc.lua``)
 
     some app in menu. (using ``Faenza`` icon set)
 
