@@ -18,7 +18,7 @@ theme.fg_minimize   = "#5C92CC"
 
 theme.border_width  = "3"
 theme.border_normal = "#000000"
-theme.border_focus  = "#5AE0DA"
+theme.border_focus  = "#70CCC7"
 theme.border_marked = "#CC2A1F"
 
 -- There are other variable sets
@@ -29,7 +29,7 @@ theme.border_marked = "#CC2A1F"
 -- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
 -- mouse_finder_[color|timeout|animate_timeout|radius|factor]
 -- Example:
-theme.tasklist_bg_focus = "#5AE0DA"
+theme.tasklist_bg_focus = "#70CCC7"
 theme.tooltip_fg_color = "#323329"
 theme.tooltip_bg_color = "#FCFFCC"
 theme.tooltip_border_width = 1
