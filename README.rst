@@ -13,7 +13,6 @@ This is config files for awesome wm (on ArchLinux)
 
         - Terminal : ``urxvt``
         - Editor   : gvim
-        - Wallpaper: ignored. set it in your .xinitrc
         - ModKey   : "Mod4"(Win Key)
         - Music Player : mpd  (need ``mpc``)
         - icon_path = "/usr/share/icons/Faenza/"
@@ -56,7 +55,8 @@ This is config files for awesome wm (on ArchLinux)
     (need ``dbus`` and ``consolekit``, also ``exec ck-launch-session``  in .xinitrc)
 
 * theme.lua
-    changed some color settings.
+    - changed some color settings.
+    - ignored Wallpaper: ignored. set it in your .xinitrc
 
 USE IT
 ======
