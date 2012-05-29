@@ -27,8 +27,7 @@ config file for awesome wm
         - Mod4+f :Float client
         - Mod4+F1~F12: lauch apps
 
-    some widgets (need vicious)
-    all show tooltips.
+    some widgets (need vicious) showing tooltips.
 
         - Volume
             add volume control: scroll-down/up(vol decrease/increase)
@@ -38,14 +37,15 @@ config file for awesome wm
                 left-click(lyric)
                 right-click(toggle)
         - CPU
-            show CPU details with mouse hovering
+            show CPU details in tooltip
         - Mem
-            show Mem details with mouse hovering
+            show Mem details in tooltip
         - Uptime
 
     some autostart programs.
 
-    some app in menu
+    some app in menu. (using Faenza icon set)
+
     
     add shutdown/rebooot/suspend/hibernate in menu
     (need dbus and exec ck-lauch-session in .xinitrc)
@@ -53,10 +53,11 @@ config file for awesome wm
 * theme.lua
     changed some color setting and border width.
 
-* gtk-app themes and icons 
-    see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
 
-* and more
+* more settings
     see https://wiki.archlinux.org/index.php/Awesome
 
-    for usb automounting , install udiskie package
+    - gtk-app themes and icons 
+        see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
+
+    - usb automounting , install udiskie package and add it when startup.
