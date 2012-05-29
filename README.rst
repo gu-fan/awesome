@@ -15,6 +15,7 @@ config file for awesome wm
         - editor   : gvim
         - wallpaper: ignored. set it in your .xinitrc
         - ModKey   : "Mod4"(Win Key)
+        - Music Player : mpd  (need ``mpc``)
     
     some keybindings
 
