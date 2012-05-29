@@ -55,8 +55,7 @@ config file for awesome wm
     (need ``dbus`` and ``consolekit``, also ``exec ck-launch-session``  in .xinitrc)
 
 * theme.lua
-    changed some color setting and border width.
-
+    changed some color settings.
 
 USE IT
 ======
