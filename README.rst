@@ -18,18 +18,18 @@ config file for awesome wm
     
     some keybindings
 
-        - Mod4+Page_Up / Page_Down : Volumne control (need ``pamixer``)
-        - Mod4+Home / End  : mpc  prev / next
-        - Mod4+inset / delete : mpc  toggle /  volumne toggle
-        - Mod4+Shift+Left(P) /Right(N) : move client to next/prev tag.
-        - Mod4+`   : Minimize
-        - Mod4+Ctrl+`   : UnMinimize
-        - Mod4+Space: Maxmize
-        - Mod4+Ctrl+Space :FullScreen
-        - Mod4+f :Float client
-        - Mod4+r :redraw client
-        - Mod4+q :close client
-        - Mod4+F1~F12: lauch apps
+        - Mod4 + Page_Up/Page_Down : Volumne control (need ``pamixer``)
+        - Mod4 + Home/End  : mpc  prev / next
+        - Mod4 + inset/delete : mpc  toggle /  volumne toggle
+        - Mod4 + Shift + Left(P)/Right(N) : move client to next/prev tag.
+        - Mod4 + `   : Minimize
+        - Mod4 + Ctrl+`   : UnMinimize
+        - Mod4 + Space: Maxmize
+        - Mod4 + Ctrl+Space :FullScreen
+        - Mod4 + f :Float client
+        - Mod4 + r :redraw client
+        - Mod4 + q :close client
+        - Mod4 + F1~F12: lauch apps
         - Removed maps:
             * Mod4 + x
             * Mod4 + m
