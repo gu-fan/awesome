@@ -10,6 +10,7 @@ config file for awesome wm
 
 * rc.lua
     basic setting
+
         - terminal : urxvt
         - editor   : gvim
         - wallpaper: ignored. set it in your .xinitrc
