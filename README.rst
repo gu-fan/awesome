@@ -56,7 +56,7 @@ This is config files for awesome wm (on ArchLinux)
 
 * theme.lua
     - changed some color settings.
-    - ignored Wallpaper: ignored. set it in your .xinitrc
+    - ignored Wallpaper: set it in your .xinitrc 
 
 USE IT
 ======
