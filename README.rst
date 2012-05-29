@@ -36,7 +36,7 @@ config file for awesome wm
     some app in menu
     
     add shutdown/rebooot/suspend/hibernate in menu
-        (need dbus and exec ck-lauch-session in .xinitrc)
+    (need dbus and exec ck-lauch-session in .xinitrc)
 
 * theme.lua
     changed some color setting and border width.
@@ -46,4 +46,5 @@ config file for awesome wm
 
 * and more
     see https://wiki.archlinux.org/index.php/Awesome
+
     for usb automounting , install udiskie package
