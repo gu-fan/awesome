@@ -14,6 +14,7 @@ require('vicious')
 
 local sexec = awful.util.spawn_with_shell
 local exec = awful.util.spawn
+local icon_path = "/usr/share/icons/Faenza/"
 function rel_movetag(n) --{{{
     local screen = screen
     local scr = mouse.screen
@@ -35,7 +36,8 @@ function dbg(vars)
 end
 function icon (name,category)
     local category = category or "apps"
-    return "/usr/share/icons/Faenza/".. category .."/32/"..name..".png"
+    local icon_path = icon_path
+    return icon_path .. category .."/32/"..name..".png"
 end
 background_timers = {}                                                             
                                                                                   
@@ -250,7 +252,7 @@ end,
 local memwidget = widget({ type = "textbox" })
 vicious.register(memwidget, vicious.widgets.mem, 
 function (widget ,args)
-    return string.format(span("▬") .. "%2d%%",args[1])
+    return string.format(span("▯") .. "%2d%%",args[1])
 end)
 
 local memwidget_t  = awful.tooltip({
@@ -293,7 +295,7 @@ uptime_t  = awful.tooltip({
 objects = { uptimewidget },
 timer_function = function()
     local args = vicious.widgets.uptime()
-    return string.format("Uptime:\n %2dd %2dh %2dm ", args[1], args[2], args[3])
+    return string.format("Uptime:\n%dd %2dh %2dm", args[1], args[2], args[3])
 end,
 })
 --}}}
@@ -370,7 +372,15 @@ mpdwidget:buttons(awful.util.table.join(
 local mpdwidget_t  = awful.tooltip({
 objects = { mpdwidget },
 timer_function = function()
-return "Mpd Control:\nLeft Click:\tLyric\nRight Click:\tToggle\nScroll Up:\tPrev\nScroll Down:\tNext"
+local cmdf = io.popen("mpc stats")
+local txt = cmdf:read("*all")
+cmdf:close()
+if txt =="" or txt == nil then
+    return "Control:\nLeft Click:\tLyric\nRight Click:\tToggle\nScroll Up:\tPrev\nScroll Down:\tNext"
+else
+    return "MPC Status:\n" .. txt .. "\nWidget Control:\nLeft Click:\tLyric\nRight Click:\tToggle\nScroll Up:\tPrev\nScroll Down:\tNext"
+end
+
 end,
 })
 --}}}

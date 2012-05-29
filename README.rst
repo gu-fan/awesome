@@ -16,7 +16,8 @@ This is config files for awesome wm (on ArchLinux)
         - Wallpaper: ignored. set it in your .xinitrc
         - ModKey   : "Mod4"(Win Key)
         - Music Player : mpd  (need ``mpc``)
-    
+        - icon_path = "/usr/share/icons/Faenza/"
+
     some keybindings
 
         - Mod4 + Page_Up/Page_Down : Volume control (need ``pamixer``)
@@ -49,7 +50,7 @@ This is config files for awesome wm (on ArchLinux)
 
     some autostart programs. (last part of ``rc.lua``)
 
-    some app in menu. (using ``Faenza`` icon set)
+    some app in menu. (with icon_path)
 
     add shutdown/rebooot/suspend/hibernate in menu
     (need ``dbus`` and ``consolekit``, also ``exec ck-launch-session``  in .xinitrc)
