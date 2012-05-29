@@ -304,7 +304,7 @@ local mpdwidget = widget({ type = "textbox" })
 vicious.register(mpdwidget, vicious.widgets.mpd,
         function (widget, args)
             if args["{state}"] == "Stop"  then 
-                return span("■") 
+                return span("■ ") .. "Stopped" 
             else 
                 local cmdf = io.popen("mpc")
                 local txt = ""
