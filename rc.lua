@@ -378,13 +378,13 @@ for s = 1, screen.count() do
     mywibox[s].widgets = {
         {
             mylauncher,
+            uptimewidget,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
         s == 1 and mysystray or nil,
-        uptimewidget,
         mytextclock,
         volwidget,
         cpuwidget,
