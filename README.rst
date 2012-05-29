@@ -9,6 +9,11 @@ INTRO
 config file for awesome wm
 
 * rc.lua
+    basic setting
+        - terminal : urxvt
+        - editor   : gvim
+        - wallpaper: ignored. set it in your .xinitrc
+    
     some keybindings
 
         - Mod4+Page_Up / Page_Down : Volumne control (with pamixer)
@@ -22,16 +27,20 @@ config file for awesome wm
         - Mod4+f :Float client
         - Mod4+F1~F12: lauch apps
 
-    some widgets (vicious)
+    some widgets (need vicious)
+    all show tooltips.
 
         - Volume
-           add volume control: scroll-down/up(vol decrease/increase)
+            add volume control: scroll-down/up(vol decrease/increase)
         - Mpd 
-           add mpd control and lyric showing (with mpdlyrics)
+            add mpd control and lyric showing (with mpdlyrics)
                 scroll-down/up(next/prev)
                 left-click(lyric)
                 right-click(toggle)
         - CPU
+            show CPU details with mouse hovering
+        - Mem
+            show Mem details with mouse hovering
         - Uptime
 
     some autostart programs.

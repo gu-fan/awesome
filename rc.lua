@@ -190,46 +190,76 @@ local spacer = widget({ type = "textbox", name = "spacer" })
 local separator = widget({ type = "textbox", name = "separator" })
 spacer.text = "  "
 separator.text = span("•","Gray")
--- Create a textclock widget
+-- }}}
+-- {{{ Textclock
 mytextclock = awful.widget.textclock({ align = "right" },span("∡") .. " %H:%M ")
-local calendar = nil
-local offset = 0
-
-function remove_calendar()
-    if calendar ~= nil then
-        naughty.destroy(calendar)
-        calendar = nil
-        offset = 0
-    end
-end
-
-function add_calendar(inc_offset)
-    local save_offset = offset
-    remove_calendar()
-    offset = save_offset + inc_offset
-    local datespec = os.date("*t")
-    datespec = datespec.year * 12 + datespec.month - 1 + offset
-    datespec = (datespec % 12 + 1) .. " " .. math.floor(datespec / 12)
-    local cal = awful.util.pread("cal -m " .. datespec)
-    cal = string.gsub(cal, "^%s*(.-)%s*$", "%1")
-    calendar = naughty.notify({
-        text = string.format('<span font_desc="%s">%s</span>', "monospace", os.date("%a, %d %B %Y") .. "\n" .. cal),
-        timeout = 0, hover_timeout = 0.5,
-        width = 180,
-    })
-end
--- change clockbox for your clock widget (e.g. mytextclock)
-mytextclock:add_signal("mouse::enter", function()
-    add_calendar(0)
-end)
-mytextclock:add_signal("mouse::leave", remove_calendar)
+--local calendar = nil
+--local offset = 0
+--
+--function remove_calendar()
+--    if calendar ~= nil then
+--        naughty.destroy(calendar)
+--        calendar = nil
+--        offset = 0
+--    end
+--end
+--
+--function add_calendar(inc_offset)
+--    local save_offset = offset
+--    remove_calendar()
+--    offset = save_offset + inc_offset
+--    local datespec = os.date("*t")
+--    datespec = datespec.year * 12 + datespec.month - 1 + offset
+--    datespec = (datespec % 12 + 1) .. " " .. math.floor(datespec / 12)
+--    local cal = awful.util.pread("cal -m " .. datespec)
+--    cal = string.gsub(cal, "^%s*(.-)%s*$", "%1")
+--    calendar = naughty.notify({
+--        text = string.format('<span font_desc="%s">%s</span>', "monospace", os.date("%a, %d %B %Y") .. "\n" .. cal),
+--        timeout = 0, hover_timeout = 0.5,
+--        width = 180,
+--    })
+--end
+---- change clockbox for your clock widget (e.g. mytextclock)
+--mytextclock:add_signal("mouse::enter", function()
+--    add_calendar(0)
+--end)
+--mytextclock:add_signal("mouse::leave", remove_calendar)
+local mytextclock_t  = awful.tooltip({
+objects = { mytextclock },
+timer_function = function()
+return string.format("%s", os.date("%a, %d %B %Y"))
+end,
+})
 --}}}
 -- {{{ CPU load
 local cpuwidget = widget({ type = "textbox" })
 vicious.register(cpuwidget, vicious.widgets.cpu, 
 function (widget ,args)
-    return string.format(span("❖") .. "%2d-%2d-%2d-%2d",args[2],args[3],args[4],args[5])
+    return string.format(span("❖") .. "%2d%%",args[1])
 end)
+
+local cpuwidget_t  = awful.tooltip({
+objects = { cpuwidget },
+timer_function = function()
+    local args = vicious.widgets.cpu()
+return string.format("CPU Detail:\n1:\t%2d%%\n2:\t%2d%%\n3:\t%2d%%\n4:\t%2d%%",args[2],args[3],args[4],args[5])
+end,
+})
+-- }}}
+-- {{{ Mem load
+local memwidget = widget({ type = "textbox" })
+vicious.register(memwidget, vicious.widgets.mem, 
+function (widget ,args)
+    return string.format(span("▬") .. "%2d%%",args[1])
+end)
+
+local memwidget_t  = awful.tooltip({
+objects = { memwidget },
+timer_function = function()
+    local args = vicious.widgets.mem()
+return string.format("Memory Detail:\nTotal Mem:\t%s\nMem Used:\t%s\nFree Mem:\t%s\nSwap Used:\t%s",args[3],args[2],args[4],args[6])
+end,
+})
 -- }}}
 -- {{{ CPU temperature
 --local thermalwidget = widget({ type = "textbox" })
@@ -246,13 +276,25 @@ volwidget:buttons(awful.util.table.join(
         sexec("pamixer --decrease 4")
     end)
 ))
+local volwidget_t  = awful.tooltip({
+objects = { volwidget },
+timer_function = function()
+return "Vol Control:\nScroll Up:\tIncrease\nScroll Down:\tDecrease"
+end,
+})
 -- }}}
 -- {{{ Uptime
 uptimewidget = widget({ type = "textbox" })
 vicious.register(uptimewidget, vicious.widgets.uptime,
         function (widget, args)
-            return string.format(span("⟳").." %2d:%2d ", args[2], args[3])
+            return string.format(span("⟳").." %2dd %2dh %2dm ", args[1], args[2], args[3])
         end, 61)
+uptime_t  = awful.tooltip({
+objects = { uptimewidget },
+timer_function = function()
+return "Uptime"
+end,
+})
 --}}}
 -- {{{ mpd
 -- Initialize widget
@@ -296,6 +338,13 @@ mpdwidget:buttons(awful.util.table.join(
         sexec("mpc next")
     end)
 ))
+
+local mpdwidget_t  = awful.tooltip({
+objects = { mpdwidget },
+timer_function = function()
+return "Mpd Control:\nLeft Click:\tLyric\nRight Click:\tToggle\nScroll Up:\tPrev\nScroll Down:\tNext"
+end,
+})
 --}}}
 -- {{{ net
 local netwidget = widget({ type = "textbox" })
@@ -304,6 +353,13 @@ vicious.register(netwidget, vicious.widgets.net,
     function (widget, args)
         return span("▾")  .. string.format("%5.1f",args["{eth0 down_kb}"]) .. span("▴")  .. string.format("%5.1f",args["{eth0 up_kb}"])
     end )
+
+local netwidget_t  = awful.tooltip({
+objects = { netwidget },
+timer_function = function()
+return "Download/Upload Speed"
+end,
+})
 --}}}
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -378,7 +434,10 @@ for s = 1, screen.count() do
     mywibox[s].widgets = {
         {
             mylauncher,
+            cpuwidget,
+            memwidget,
             uptimewidget,
+            spacer,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
@@ -387,9 +446,8 @@ for s = 1, screen.count() do
         s == 1 and mysystray or nil,
         mytextclock,
         volwidget,
-        cpuwidget,
-        netwidget,
         mpdwidget,
+        netwidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
