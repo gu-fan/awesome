@@ -29,7 +29,6 @@ config file for awesome wm
         - Mod4+f :Float client
         - Mod4+r :redraw client
         - Mod4+q :close client
-        - Alt+F4 :close client
         - Mod4+F1~F12: lauch apps
 
     some widgets (need ``vicious``) showing tooltips.
