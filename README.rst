@@ -25,13 +25,12 @@ config file for awesome wm
     some widgets (vicious)
 
         - Volume
-           add volume control:
-           scroll-down/up(vol decrease/increase)
+           add volume control: scroll-down/up(vol decrease/increase)
         - Mpd 
-           add mpd control and lyric showing (with mpdlyrics)
-           scroll-down/up(next/prev)
-           left-click(lyric)
-           right-click(toggle)
+           - add mpd control and lyric showing (with mpdlyrics)
+                scroll-down/up(next/prev)
+                left-click(lyric)
+                right-click(toggle)
         - CPU
         - Uptime
 
