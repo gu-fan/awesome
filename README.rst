@@ -18,7 +18,7 @@ config file for awesome wm
     
     some keybindings
 
-        - Mod4 + Page_Up/Page_Down : Volumne control (need ``pamixer``)
+        - Mod4 + Page_Up/Page_Down : Volume control (need ``pamixer``)
         - Mod4 + Home/End  : mpc  prev / next
         - Mod4 + inset/delete : mpc  toggle /  volumne toggle
         - Mod4 + Shift + Left(P)/Right(N) : move client to next/prev tag.
