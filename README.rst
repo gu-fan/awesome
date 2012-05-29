@@ -62,7 +62,7 @@ USE IT
 
 * install
 
-.. code:: bash
+.. code-block:: bash
 
     git clone git://github.com/Rykka/awesome.git ~/.config/awesome
     cd ~/.config/awesome
