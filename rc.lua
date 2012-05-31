@@ -338,7 +338,15 @@ function add_lyric()
 end)
 end
 lrcwidget:buttons(awful.util.table.join(
-    awful.button({ }, 1, add_lyric)
+    awful.button({ }, 1, add_lyric),
+    awful.button({ }, 4, function()
+        sexec("mpc prev")
+        vicious.force({ mpdwidget, })
+    end),
+    awful.button({ }, 5, function()
+        sexec("mpc next")
+        vicious.force({ mpdwidget, })
+    end)
 ))
 -- }}}
 -- {{{ mpd
