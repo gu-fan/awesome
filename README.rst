@@ -50,6 +50,7 @@ This is config files for awesome wm (on ArchLinux)
             - left-click(toggle)
             - right-click(stop)
         - Lrc: showing current lyrics (need ``lrcdis``)
+            - scroll-down/up(next/prev)
             - left-click(show full lyric) (need ``mpdlyrics``)
 
     some autostart programs. (last part of ``rc.lua``)
