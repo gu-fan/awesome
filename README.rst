@@ -1,6 +1,6 @@
 .. README.rst                                 
 .. Create: 2012-05-25
-.. Update: 2012-05-30
+.. Update: 2012-06-01
 
 
 INTRO
@@ -39,13 +39,18 @@ This is config files for awesome wm (on ArchLinux)
 
         - Volume:add volume control 
             - scroll-down/up(vol decrease/increase)
-        - Mpd: add mpd control and lyric showing (need ``mpdlyrics``)
-            - scroll-down/up(next/prev)
-            - left-click(lyric)
-            - right-click(toggle)
         - CPU:show CPU details in tooltip
         - Mem:show Mem details in tooltip
         - Uptime
+
+    bottom panel
+
+        - Mpd: add mpd control 
+            - scroll-down/up(next/prev)
+            - left-click(toggle)
+            - right-click(stop)
+        - Lrc: showing current lyrics (need ``lrcdis``)
+            - left-click(show full lyric) (need ``mpdlyrics``)
 
     some autostart programs. (last part of ``rc.lua``)
 

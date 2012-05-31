@@ -160,9 +160,8 @@ myappmenu = {
     { "&firefox"     , "firefox"      ,  icon("firefox")},
     { "&gvim"        ,  editor_cmd    ,  icon("gvim")},
     { "goldendict"   , "goldendict"  },
-    { "&libreoffice" , "libreoffice"  ,  icon("libreoffice-base")},
+    { "&office"      , "libreoffice"  ,  icon("libreoffice-base")},
     { "&nautilus"    , "nautilus"     ,  icon("nautilus")},
-    { "osdlyrics"    , "osdlyrics"   },
     { "&shutter"     , "shutter"      ,  icon("shutter")},
     { "&terminal"    ,  terminal      ,  icon("terminal")},
     { "&virtualbox"  , "virtualbox"  },
@@ -171,9 +170,10 @@ myappmenu = {
     { "gimp"         , "gimp"        },
     { "mypaint"      , "mypaint"     },
 }
-mymainmenu = awful.menu({ items = { { "&system", myawesomemenu, beautiful.awesome_icon },
-                                    { "----------", " "},
+mymainmenu = awful.menu({ items = { 
                                     { "&apps", myappmenu},
+                                    { "----------", " "},
+                                    { "&system", myawesomemenu, beautiful.awesome_icon },
                                   }
                         })
 
@@ -273,9 +273,11 @@ vicious.register(volwidget, vicious.widgets.volume, span("♪")   ..  "$1%", 1,"
 volwidget:buttons(awful.util.table.join(
     awful.button({ }, 4, function()
         sexec("pamixer --increase 4")
+        vicious.force({ volwidget, })
     end),
     awful.button({ }, 5, function()
         sexec("pamixer --decrease 4")
+        vicious.force({ volwidget, })
     end)
 ))
 local volwidget_t  = awful.tooltip({
@@ -299,6 +301,46 @@ timer_function = function()
 end,
 })
 --}}}
+-- {{{ Lyric
+local function lrc_worker(format, warg) --{{{
+    -- assume 'lrcdis -m echo > /tmp/lrc &' is executing
+    local f = io.popen("cat /tmp/lrc ")
+    local c =""
+    for line in  f:lines() do
+        --if line ~= nil and (string.match(line, '错误') == nil) then
+        if line ~= nil then
+            c = line 
+        end
+    end
+    f:close()
+    return {c}
+end --}}}
+local lrcwidget = widget({ type = "textbox" })
+vicious.register(lrcwidget, lrc_worker,
+        function (widget, args)
+            return  args[1]
+        end,1)
+local lyric = nil
+ 
+function remove_lyric()
+    if lyric ~= nil then
+        naughty.destroy(lyric)
+        lyric = nil
+    end
+end
+
+function add_lyric()
+    remove_lyric()
+    run_background("mpdlyrics -n",function(txt)                              
+   lyric = naughty.notify({text=txt,
+        timeout = 0, hover_timeout = nil,
+        width = 300,height=1000,font="Verdana 12"})
+end)
+end
+lrcwidget:buttons(awful.util.table.join(
+    awful.button({ }, 1, add_lyric)
+))
+-- }}}
 -- {{{ mpd
 -- Initialize widget
 local mpdwidget = widget({ type = "textbox" })
@@ -336,27 +378,14 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
             end
         end, 
         10)
-local lyric = nil
- 
-function remove_lyric()
-    if lyric ~= nil then
-        naughty.destroy(lyric)
-        lyric = nil
-    end
-end
 
-function add_lyric()
-    remove_lyric()
-    run_background("mpdlyrics -n",function(txt)                              
-   lyric = naughty.notify({text=txt,
-        timeout = 0, hover_timeout = nil,
-        width = 300,height=1000,font="Verdana 12"})
-end)
-end
 mpdwidget:buttons(awful.util.table.join(
-    awful.button({ }, 1, add_lyric),
-    awful.button({ }, 3, function()
+    awful.button({ }, 1, function()
         sexec("mpc toggle")
+        vicious.force({ mpdwidget, })
+    end),
+    awful.button({ }, 3, function()
+        sexec("mpc stop")
         vicious.force({ mpdwidget, })
     end),
     awful.button({ }, 4, function()
@@ -370,18 +399,21 @@ mpdwidget:buttons(awful.util.table.join(
 ))
 
 local mpdwidget_t  = awful.tooltip({
-objects = { mpdwidget },
-timer_function = function()
-local cmdf = io.popen("mpc stats")
-local txt = cmdf:read("*all")
-cmdf:close()
-if txt =="" or txt == nil then
-    return "Control:\nLeft Click:\tLyric\nRight Click:\tToggle\nScroll Up:\tPrev\nScroll Down:\tNext"
-else
-    return "MPC Status:\n" .. txt .. "\nWidget Control:\nLeft Click:\tLyric\nRight Click:\tToggle\nScroll Up:\tPrev\nScroll Down:\tNext"
-end
-
-end,
+    objects = { mpdwidget },
+    timer_function = function()
+        local cmdf = io.popen("mpc stats")
+        local txt = cmdf:read("*all")
+        cmdf:close()
+        local cmdf = io.popen("mpc status")
+        local txt2 = cmdf:read("*all")
+        cmdf:close()
+        txt3 = "\nWidget Control:\n\nLeft Click:\tToggle\nRight Click:\tStop\nScroll Up:\tPrev\nScroll Down:\tNext"
+        if txt =="" or txt == nil then
+            return txt3
+        else
+            return "Song Status:\n\n" .. txt2 .. "\nMPC Status:\n\n" .. txt .. txt3
+        end
+    end,
 })
 --}}}
 -- {{{ net
@@ -406,6 +438,7 @@ mysystray = widget({ type = "systray" })
 
 -- Create a wibox for each screen and add it
 mywibox = {}
+mybotwibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -449,6 +482,8 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
+
+
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
@@ -486,12 +521,22 @@ for s = 1, screen.count() do
         s == 1 and mysystray or nil,
         mytextclock,
         volwidget,
-        mpdwidget,
         netwidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
-
+    
+    -- Create the wibox
+    mybotwibox[s] = awful.wibox({ position = "bottom", screen = s })
+    ---- Add widgets to the wibox - order matters
+    mybotwibox[s].widgets = {
+        {
+        mpdwidget,
+        layout = awful.widget.layout.horizontal.leftright,
+        },
+        lrcwidget,
+        layout = awful.widget.layout.horizontal.rightleft
+    }
 end
 -- }}}
 
@@ -568,6 +613,7 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({ modkey,           }, "F1", function () awful.util.spawn(terminal) end),
     awful.key({ modkey,           }, "F2", function () exec("gvim") end),
+    awful.key({ modkey,  "Shift"  }, "F2", function () exec("gvim -c 'GalaxyLoad MoonNight'") end),
     awful.key({ modkey,           }, "F3", function () exec("firefox") end),
     awful.key({ modkey,           }, "F4", add_lyric ),
     awful.key({ modkey, "Shift"   }, "F4", remove_lyric ),
@@ -736,7 +782,7 @@ client.add_signal("unfocus", function(c)
                              end)
 -- }}}
 
--- {{{ autosart
+---- {{{ autosart
 do
     local cmds = 
     { 
@@ -748,12 +794,14 @@ do
         -- for transparency
         --"xcompmgr",
         -- for automount usb disk
-        "udiskie"
+        "udiskie",
     }
 
     for _,prg in pairs(cmds) do
         awful.util.spawn_with_shell("pgrep -u $USER -x " .. prg .. " || (" .. prg .. ")")
         --awful.util.spawn(i)
     end
+    -- for lyrics
+    awful.util.spawn_with_shell("pgrep -u $USER -x lrcdis || (lrcdis -m echo >! /tmp/lrc &) ")
 end
 -- }}}
