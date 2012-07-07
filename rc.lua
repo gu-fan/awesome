@@ -142,16 +142,32 @@ end
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
+local sys = {}
+function sys.suspend()
+    exec('dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend')
+end
+
+function sys.hibernate()
+    exec('dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate')
+end
+function sys.reboot()
+    exec('dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart')
+end
+function sys.shutdown()
+    exec('dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop')
+end
 myawesomemenu = {
-   { "&manual", editor_cmd .. " '+Man awesome'" },
-   { "&edit config", editor_cmd .. " " .. awesome.conffile },
-   { "&restart", awesome.restart },
-   { "&quit", awesome.quit },
+   { "&awesome", {  { "&manual", editor_cmd .. " '+Man awesome'" },
+                    { "&edit config", editor_cmd .. " " .. awesome.conffile },
+                    { "&restart", awesome.restart },
+                    { "&quit", awesome.quit },
+                }
+   },
    { "---------", " " },
-   { "sus&pend", 'dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend' },
-   { "hibernate", 'dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate' },
-   { "re&boot", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart' ,  icon("system-log-out","actions")},
-   { "sh&utdown", 'dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop' ,  icon("system-shutdown","actions")},
+   { "&suspend",  sys.suspend },
+   { "hibernate",  sys.hibernate},
+   { "&reboot", sys.reboot ,  icon("system-log-out","actions")},
+   { "sh&utdown", sys.shutdown ,  icon("system-shutdown","actions")},
 }
 myappmenu = {
     { "&chrome"      , "google-chrome", icon("google-chrome")},
@@ -304,21 +320,20 @@ end,
 -- {{{ Lyric
 local function lrc_worker(format, warg) --{{{
     -- assume 'lrcdis -m echo > /tmp/lrc &' is executing
-    local f = io.popen("cat /tmp/lrc ")
-    local c =""
-    for line in  f:lines() do
-        --if line ~= nil and (string.match(line, '错误') == nil) then
-        if line ~= nil then
-            c = line 
-        end
-    end
+    local f = io.popen("tail -1 /tmp/lrc ")
+    local c = f:read("*line")
     f:close()
-    return {c}
+    if c==nil or c=="" then
+        c = "---------------"
+    end
+    -- XXX wrong encoding in lyric will output invalid markup
+    return {vicious.helpers.escape(c)}
+    --return {c}
 end --}}}
 local lrcwidget = widget({ type = "textbox" })
 vicious.register(lrcwidget, lrc_worker,
         function (widget, args)
-            return  args[1]
+            return  span("#") .. args[1] .. span("#") 
         end,1)
 local lyric = nil
  
@@ -334,11 +349,15 @@ function add_lyric()
     run_background("mpdlyrics -n",function(txt)                              
    lyric = naughty.notify({text=txt,
         timeout = 0, hover_timeout = nil,
-        width = 300,height=1000,font="Verdana 12"})
+        position="bottom_right",
+        width = 400,height=1000,font="Verdana 12"})
 end)
 end
 lrcwidget:buttons(awful.util.table.join(
     awful.button({ }, 1, add_lyric),
+    awful.button({ }, 2, function()
+        sexec("mpdlyrics -e")
+    end),
     awful.button({ }, 4, function()
         sexec("mpc prev")
         vicious.force({ mpdwidget, })
@@ -441,6 +460,7 @@ timer_function = function()
 end,
 })
 --}}}
+-- dock
 -- Create a systray
 mysystray = widget({ type = "systray" })
 
@@ -449,6 +469,7 @@ mywibox = {}
 mybotwibox = {}
 mypromptbox = {}
 mylayoutbox = {}
+--{{{ Button
 mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
@@ -460,26 +481,33 @@ mytaglist.buttons = awful.util.table.join(
                     )
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
-                     awful.button({ }, 1, function (c)
-                                              if c == client.focus then
-                                                  c.minimized = true
-                                              else
-                                                  if not c:isvisible() then
-                                                      awful.tag.viewonly(c:tags()[1])
-                                                  end
-                                                  -- This will also un-minimize
-                                                  -- the client, if needed
-                                                  client.focus = c
-                                                  c:raise()
-                                              end
+                     awful.button({ }, 3, function (c)
+                        if c == client.focus then
+                            c.minimized = true
+                        else
+                            if not c:isvisible() then
+                                awful.tag.viewonly(c:tags()[1])
+                            end
+                            -- This will also un-minimize
+                            -- the client, if needed
+                            client.focus = c
+                            c:raise()
+                        end
                                           end),
-                     awful.button({ }, 3, function ()
-                                              if instance then
-                                                  instance:hide()
-                                                  instance = nil
-                                              else
-                                                  instance = awful.menu.clients({ width=250 })
-                                              end
+                     awful.button({ }, 1, function (c)
+                        if c == client.focus then
+                            c.maximized_horizontal = not c.maximized_horizontal
+                            c.maximized_vertical   = not c.maximized_vertical
+                        elseif not c:isvisible() then
+                            awful.tag.viewonly(c:tags()[1])
+                            -- This will also un-minimize
+                            -- the client, if needed
+                            client.focus = c
+                            c:raise()
+                        elseif c ~= client.focus then
+                            client.focus = c
+                            c:raise()
+                        end
                                           end),
                      awful.button({ }, 4, function ()
                                               awful.client.focus.byidx(1)
@@ -490,8 +518,8 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
-
-
+--}}}
+--{{{ Wibox
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
@@ -504,7 +532,7 @@ for s = 1, screen.count() do
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.noempty, mytaglist.buttons)
 
     -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(function(c)
@@ -520,13 +548,8 @@ for s = 1, screen.count() do
             cpuwidget,
             memwidget,
             uptimewidget,
-            spacer,
-            mytaglist[s],
-            mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
-        mylayoutbox[s],
-        s == 1 and mysystray or nil,
         mytextclock,
         volwidget,
         netwidget,
@@ -539,25 +562,32 @@ for s = 1, screen.count() do
     ---- Add widgets to the wibox - order matters
     mybotwibox[s].widgets = {
         {
-        mpdwidget,
-        layout = awful.widget.layout.horizontal.leftright,
+            mytaglist[s],
+            mypromptbox[s],
+            mpdwidget,
+            spacer,
+            layout = awful.widget.layout.horizontal.leftright,
         },
+        mylayoutbox[s],
+        s == 1 and mysystray or nil,
+        spacer,
         lrcwidget,
         layout = awful.widget.layout.horizontal.rightleft
     }
-end
+end --}}}
 -- }}}
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end)
+    --awful.button({ }, 4, awful.tag.viewnext),
+    --awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+--
+globalkeys = awful.util.table.join( --{{{
     awful.key({ }, "Print", function () exec("shutter -f") end),
     awful.key({"Mod1" }, "Print", function () exec("shutter -w") end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
@@ -623,14 +653,13 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "F2", function () exec("gvim") end),
     awful.key({ modkey,  "Shift"  }, "F2", function () exec("gvim -c 'GalaxyLoad MoonNight'") end),
     awful.key({ modkey,           }, "F3", function () exec("firefox") end),
-    awful.key({ modkey,           }, "F4", add_lyric ),
-    awful.key({ modkey, "Shift"   }, "F4", remove_lyric ),
-    awful.key({ modkey,           }, "F5", function () exec("google-chrome") end),
+    --awful.key({ modkey,           }, "F4", add_lyric ),
+    --awful.key({ modkey, "Shift"   }, "F4", remove_lyric ),
+    awful.key({ modkey,           }, "F4", function () exec("google-chrome") end),
     awful.key({ modkey,           }, "F6", function () exec("libreoffice") end),
     awful.key({ modkey,           }, "F7", function () exec("gimp") end),
     awful.key({ modkey,           }, "F8", function () exec("nautilus") end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
@@ -641,7 +670,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Down",  function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey,           }, "Up",    function () awful.layout.inc(layouts, -1) end),
 
-    awful.key({ modkey, "Control" }, "`", awful.client.restore)
+    awful.key({ modkey, "Control" }, "`", awful.client.restore),
+    awful.key({ modkey, "Control" }, "q", awful.client.restore)
 
     -- Prompt
     --awful.key({ modkey, "Shift"   }, "r",     function () mypromptbox[mouse.screen]:run() end)
@@ -654,10 +684,13 @@ globalkeys = awful.util.table.join(
     --              awful.util.getdir("cache") .. "/history_eval")
     --          end)
 )
-
-clientkeys = awful.util.table.join(
+--}}}
+clientkeys = awful.util.table.join( --{{{
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
-    awful.key({ modkey,           }, "q",      function (c) c:kill()                         end),
+    awful.key({ modkey,          }, "x",      function (c) c:kill()                         end),
+    awful.key({ "Mod1",          }, "F4",      function (c) c:kill()                         end),
+    awful.key({ modkey,           }, "q",      function (c) c.minimized = true
+                                 end),
     awful.key({ modkey,           }, "f",      awful.client.floating.toggle                     ),
     awful.key({ modkey,           }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "KP_Enter", function (c) c:swap(awful.client.getmaster()) end),
@@ -677,7 +710,7 @@ clientkeys = awful.util.table.join(
             c.maximized_vertical   = not c.maximized_vertical
         end)
 )
-
+--}}}
 -- Compute the maximum number of digit we need, limited to 9
 keynumber = 0
 for s = 1, screen.count() do
@@ -745,6 +778,10 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "goldendict" },
       properties = { floating = true } },
+    { rule = { class = "cairo-dock" },
+      properties = { floating = true } },
+    { rule = { instance = "cairo-dock" },
+      properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -790,7 +827,15 @@ client.add_signal("unfocus", function(c)
                              end)
 -- }}}
 
----- {{{ autosart
+-- {{{ autosart
+function run_once(cmd) --{{{
+  findme = cmd
+  firstspace = cmd:find(" ")
+  if firstspace then
+    findme = cmd:sub(0, firstspace-1)
+  end
+  awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
+end --}}}
 do
     local cmds = 
     { 
@@ -798,18 +843,14 @@ do
         "mpd",
         "easystroke",
         "dropboxd",
-        "synapse",
-        -- for transparency
-        --"xcompmgr",
-        -- for automount usb disk
-        "udiskie",
+        --"synapse -s",
+        "kupfer",
+        "xcompmgr",                   -- for transparency
+        "udiskie",                      -- for automount usb disk
     }
 
     for _,prg in pairs(cmds) do
-        awful.util.spawn_with_shell("pgrep -u $USER -x " .. prg .. " || (" .. prg .. ")")
-        --awful.util.spawn(i)
+        run_once(prg)
     end
-    -- for lyrics
-    awful.util.spawn_with_shell("pgrep -u $USER -x lrcdis || (lrcdis -m echo >! /tmp/lrc &) ")
 end
 -- }}}
