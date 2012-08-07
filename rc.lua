@@ -380,6 +380,7 @@ vicious.register(mpdwidget, vicious.widgets.mpd,
             else 
                 local cmdf = io.popen("mpc")
                 local txt = ""
+
                 if cmdf == nil then
                     txt =  span("▶ ")   .. args["{Artist}"]..' - '.. args["{Title}"]
                 else
@@ -449,7 +450,8 @@ local netwidget = widget({ type = "textbox" })
 vicious.register(netwidget, vicious.widgets.net,
     function (widget, args)
         --return span("▼")  .. string.format("%5.1f",args["{eth0 down_kb}"]) .. span("▲")  .. string.format("%5.1f",args["{eth0 up_kb}"])
-        return span("▼")  .. string.format("%.1f",args["{eth0 down_kb}"])
+        --return span("▼")  .. string.format("%5.1f",args["{eth0 down_kb}"])
+        return ""
     end )
 
 local netwidget_t  = awful.tooltip({
@@ -545,11 +547,16 @@ for s = 1, screen.count() do
     mywibox[s].widgets = {
         {
             mylauncher,
+            mytaglist[s],
+            mypromptbox[s],
+            mpdwidget,
             cpuwidget,
             memwidget,
             uptimewidget,
             layout = awful.widget.layout.horizontal.leftright
         },
+        mylayoutbox[s],
+        s == 1 and mysystray or nil,
         mytextclock,
         volwidget,
         netwidget,
@@ -557,23 +564,22 @@ for s = 1, screen.count() do
         layout = awful.widget.layout.horizontal.rightleft
     }
     
-    -- Create the wibox
-    mybotwibox[s] = awful.wibox({ position = "bottom", screen = s })
-    ---- Add widgets to the wibox - order matters
-    mybotwibox[s].widgets = {
-        {
-            mytaglist[s],
-            mypromptbox[s],
-            mpdwidget,
-            spacer,
-            layout = awful.widget.layout.horizontal.leftright,
-        },
-        mylayoutbox[s],
-        s == 1 and mysystray or nil,
-        spacer,
-        lrcwidget,
-        layout = awful.widget.layout.horizontal.rightleft
-    }
+    ---- Create the wibox
+    --mybotwibox[s] = awful.wibox({ position = "bottom", screen = s })
+    ------ Add widgets to the wibox - order matters
+    --mybotwibox[s].widgets = {
+    --    {
+    --        mytaglist[s],
+    --        mypromptbox[s],
+    --        mpdwidget,
+    --        spacer,
+    --        layout = awful.widget.layout.horizontal.leftright,
+    --    },
+    --    mylayoutbox[s],
+    --    s == 1 and mysystray or nil,
+    --    spacer,
+    --    layout = awful.widget.layout.horizontal.rightleft
+    --}
 end --}}}
 -- }}}
 
