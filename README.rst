@@ -133,7 +133,7 @@ Widgets
 Config
 ------
 
-* more settings: 
+* More : 
 
   see https://wiki.archlinux.org/index.php/Awesome 
 
