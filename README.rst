@@ -1,7 +1,7 @@
-.. README.rst                                 
-.. Create: 2012-05-25
-.. Update: 2012-06-01
-
+:File: README.rst                                 
+:Author: Rykka
+:Create: 2012-05-25
+:Update: 2012-06-01
 
 INTRO
 =====
