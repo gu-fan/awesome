@@ -29,8 +29,12 @@ Files
 * keydoc.lua  
 * conf.lua  some basic settings can be changed 
 
-    - change default settings.
-    - add autostart programs.
+  + change default settings.
+  + add autostart programs.
+
+  :NOTE: to show the up/down net speed without error.
+         You must set the ``NET_INTERFACE``
+
 
 Instruction
 ===========

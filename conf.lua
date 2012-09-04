@@ -7,6 +7,7 @@
 --ICON = ""
 --COLOR = ""
 
+-- the net interface , 'eth0' or 'wlan0' in most cases
 NET_INTERFACE = "wlan0"
 
 -- This is used later as the default terminal and editor to run.
