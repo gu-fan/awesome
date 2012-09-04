@@ -1,85 +1,124 @@
-:File: README.rst                                 
+:Document: README for awesome rc
 :Author: Rykka
 :Create: 2012-05-25
-:Update: 2012-06-01
+:Update: 2012-09-04
 
 INTRO
 =====
 
-This is config files for awesome wm (on ArchLinux)
+This is my config file for awesome_.
+
+.. _awesome: http://awesome.naquadah.org/
+
+Files
+-----
 
 * rc.lua
-    basic setting
 
-        - Terminal : ``urxvt``
-        - Editor   : gvim
-        - ModKey   : "Mod4"(Win Key)
-        - Music Player : mpd  (need ``mpc``)
-        - icon_path = "/usr/share/icons/Faenza/"
+    - change basic setting in conf.lua
+    - add some keybindings, see KeyBinding_
+    - add some widgets , see Widgets_
+    - widget and key to show/hide bottom panel
+    - menu with apps.
 
-    some keybindings
+* themes/default/theme.lua
 
-        - Mod4 + Page_Up/Page_Down : Volume control (need ``pamixer``)
-        - Mod4 + Home/End  : mpc  prev / next
-        - Mod4 + inset/delete : mpc  toggle /  volumne toggle
-        - Mod4 + Shift + Left(P)/Right(N) : move client to next/prev tag.
-        - Mod4 + `   : Minimize
-        - Mod4 + Ctrl+`   : UnMinimize
-        - Mod4 + Space: Maxmize Toggle
-        - Mod4 + Ctrl+Space :FullScreen Toggle
-        - Mod4 + f :Floating client Toggle
-        - Mod4 + r :redraw client
-        - Mod4 + q :close client
-        - Mod4 + F1~F12: lauch apps
-        - Removed maps:
-            * Mod4 + x
-            * Mod4 + m
+    - changed some color and font settings. (Dejavu Sans Mono)
 
-    some widgets (need the awesome submodule ``vicious``) showing tooltips.
+* keydoc.lua  
+* conf.lua  some basic settings can be changed 
 
-        - Volume:add volume control 
-            - scroll-down/up(vol decrease/increase)
-        - CPU:show CPU details in tooltip
-        - Mem:show Mem details in tooltip
-        - Uptime
+    - change default settings.
+    - add autostart programs.
 
-    bottom panel
+Instruction
+===========
 
-        - Mpd: add mpd control 
-            - scroll-down/up(next/prev)
-            - left-click(toggle)
-            - right-click(stop)
-        - Lrc: showing current lyrics (need ``lrcdis``)
-            - scroll-down/up(next/prev)
-            - left-click(show full lyric) (need ``mpdlyrics``)
+Install
+-------
 
-    some autostart programs. (last part of ``rc.lua``)
+Requirements
+~~~~~~~~~~~~
 
-    some app in menu. (with icon_path)
+* volume: ``pamixer``
+* music: ``mpd`` and ``mpc``
+* print screen : ``import``
+* reboot/shutdown/log out : 
+        
+    have ``dbus`` and ``consolekit`` installed
+    add ``exec ck-launch-session awesome`` in ``.xinitrc``
 
-    add shutdown/rebooot/suspend/hibernate in menu
-    (need ``dbus`` and ``consolekit``, also ``exec ck-launch-session``  in .xinitrc)
+    or use ``gnome`` and ``gnome-session``
 
-* theme.lua
-    - changed some color settings.
-    - ignored Wallpaper: set it in your .xinitrc 
+Installation
+~~~~~~~~~~~~
 
-USE IT
-======
+.. this should use code: but not supported by github
 
-* install ::
+::
 
    git clone git://github.com/Rykka/awesome.git ~/.config/awesome
    cd ~/.config/awesome
    git submodule init
    git submodule update
 
+Config
+------
 
-* more settings
-    see https://wiki.archlinux.org/index.php/Awesome
+* more settings: 
 
-    - gtk-app themes and icons 
-        see http://awesome.naquadah.org/wiki/Customizing_GTK_Apps
+  see https://wiki.archlinux.org/index.php/Awesome 
 
-    - usb automounting 
-        install ``udiskie`` package and add to startup.
+  and http://awesome.naquadah.org/wiki/Main_Page
+
+KeyBinding
+----------
+
+* Win + c : Show KeyBindings
+
+
+* Win + j/k (Up/Down) (Alt+Tab) : 
+  move focus to next/prev client position
+* Win + Shift + j/k (Up/Down) : 
+  shift client to next/prev client position
+
+* Win + h/l (Left/Right) (Win+Tab): 
+  move to next/prev tag.
+* Win + Shift + h/l (Left/Right) : 
+  move client to next/prev tag.
+
+* Win + ` /(q)   : Minimize
+* Win + Ctrl+`   : UnMinimize
+* Win + Space: Maxmize Toggle
+* Win + Ctrl+Space :FullScreen Toggle
+* Win + f :Floating client Toggle
+* Win + r :redraw client
+* Win + q :minimize 
+* Win + x (Alt +F4) : close client
+
+* Win + Home/End  : mpc  prev / next
+* Win + PgUp/PgDn: volumne Up/Down
+
+* Buttons on tasklist:
+
+  + right click : focus and toggle floating.
+  + left click : minimize
+
+
+Widgets
+-------
+
+* Volume: volume control 
+
+  * show volume in tooltip
+  * scroll-down/up to decrease/increase volume
+
+* CPU:show CPU details in tooltip
+* Mem:show Mem details in tooltip
+* Uptime
+* Mpd: add mpd control 
+
+  * scroll-down/up(next/prev)
+  * left-click(toggle)
+  * right-click(stop)
+

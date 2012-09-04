@@ -9,7 +9,7 @@ theme.font          = "DejaVu Sans Mono 10"
 theme.bg_normal     = "#222222"
 theme.bg_focus      = "#4D6F99"
 theme.bg_urgent     = "#ff0000"
-theme.bg_minimize   = "#055366"
+theme.bg_minimize   = "#142C33"
 
 theme.fg_normal     = "#BFBFBF"
 theme.fg_focus      = "#1A1E1E"
@@ -17,7 +17,7 @@ theme.fg_urgent     = "#FFB38C"
 theme.fg_minimize   = "#5C92CC"
 
 theme.border_width  = "2"
-theme.border_normal = "#000000"
+theme.border_normal = "#111111"
 theme.border_focus  = "#4D6F99"
 theme.border_marked = "#CC2A1F"
 
@@ -45,11 +45,12 @@ theme.tasklist_floating_icon = "/usr/share/awesome/themes/default/tasklist/float
 -- menu_[border_color|border_width]
 -- menu_[bg|fg]_[normal|focus]
 theme.menu_submenu_icon = "/usr/share/awesome/themes/default/submenu.png"
-theme.menu_height = "18"
+theme.menu_height = "24"
+theme.menu_border_color = "#111111"
 theme.menu_width  = "200"
 
 -- You can use your own command to set your wallpaper
-theme.wallpaper_cmd = { "" }
+theme.wallpaper_cmd = { "feh --bg-scale ~/Pictures/wallpaper-1536425.jpg " }
 
 -- You can add as many variables as
 -- you wish and access them by using
