@@ -2,6 +2,7 @@
 :Author: Rykka
 :Create: 2012-05-25
 :Update: 2012-09-04
+:Github: https://github.com/Rykka/awesome/network
 
 INTRO
 =====
@@ -22,7 +23,7 @@ Files
     - menu with apps.
 
 * themes/default/theme.lua
-
+    
     - changed some color and font settings. (Dejavu Sans Mono)
 
 * keydoc.lua  
@@ -50,6 +51,8 @@ Requirements
 
     or use ``gnome`` and ``gnome-session``
 
+* Fonts: ``Dejavu Sans Mono`` and ``Monaco``
+
 Installation
 ~~~~~~~~~~~~
 
@@ -61,15 +64,6 @@ Installation
    cd ~/.config/awesome
    git submodule init
    git submodule update
-
-Config
-------
-
-* more settings: 
-
-  see https://wiki.archlinux.org/index.php/Awesome 
-
-  and http://awesome.naquadah.org/wiki/Main_Page
 
 KeyBinding
 ----------
@@ -121,4 +115,13 @@ Widgets
   * scroll-down/up(next/prev)
   * left-click(toggle)
   * right-click(stop)
+
+Config
+------
+
+* more settings: 
+
+  see https://wiki.archlinux.org/index.php/Awesome 
+
+  and http://awesome.naquadah.org/wiki/Main_Page
 
