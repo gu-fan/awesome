@@ -74,6 +74,8 @@ KeyBinding
 
 * Win + c : Show KeyBindings
 
+Layouts
+~~~~~~~
 
 * Win + j/k (Up/Down) (Alt+Tab) : 
   move focus to next/prev client position
@@ -84,6 +86,11 @@ KeyBinding
   move to next/prev tag.
 * Win + Shift + h/l (Left/Right) : 
   move client to next/prev tag.
+* Win + n/p : 
+  move to next/prev screen
+
+Client Control
+~~~~~~~~~~~~~~
 
 * Win + ` /(q)   : Minimize
 * Win + Ctrl+`   : UnMinimize
@@ -93,6 +100,9 @@ KeyBinding
 * Win + r :redraw client
 * Win + q :minimize 
 * Win + x (Alt +F4) : close client
+
+Miscs
+~~~~~
 
 * Win + Home/End  : mpc  prev / next
 * Win + PgUp/PgDn: volumne Up/Down
