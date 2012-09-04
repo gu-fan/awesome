@@ -16,20 +16,23 @@ Files
 
 * rc.lua
 
-    - change basic setting in conf.lua
-    - add some keybindings, see KeyBinding_
-    - add some widgets , see Widgets_
-    - widget and key to show/hide bottom panel
-    - menu with apps.
+  + change basic setting in conf.lua
+  + add some keybindings, see KeyBinding_
+  + add some widgets , see Widgets_
+  + widget and key to show/hide bottom panel
+  + menu with apps.
 
 * themes/default/theme.lua
     
-    - changed some color and font settings. (Dejavu Sans Mono)
+  + changed some color and font settings. (Dejavu Sans Mono)
 
 * keydoc.lua  
-* conf.lua  some basic settings can be changed 
 
-  + change default settings.
+  + keydoc for keybindings.
+
+* conf.lua 
+
+  + change some basic settings here.
   + add autostart programs.
 
   :NOTE: to show the up/down net speed without error.
@@ -50,15 +53,15 @@ Requirements
 * print screen : ``import``
 * reboot/shutdown/log out : 
         
-    have ``dbus`` and ``consolekit`` installed
-    add ``exec ck-launch-session awesome`` in ``.xinitrc``
+  have ``dbus`` and ``consolekit`` installed
+  add ``exec ck-launch-session awesome`` in ``.xinitrc``
 
-    or use ``gnome`` and ``gnome-session``
+  or use ``gnome`` and ``gnome-session``
 
 * Fonts: ``Dejavu Sans Mono`` and ``Monaco``
 
-Installation
-~~~~~~~~~~~~
+Commands
+~~~~~~~~
 
 .. this should use code: but not supported by github
 
@@ -107,6 +110,9 @@ Miscs
 * Win + Home/End  : mpc  prev / next
 * Win + PgUp/PgDn: volumne Up/Down
 
+* Win + b or widget ``◈`` on the top_right:
+  show/hide bottom panel
+
 * Buttons on tasklist:
 
   + right click : focus and toggle floating.
@@ -118,17 +124,17 @@ Widgets
 
 * Volume: volume control 
 
-  * show volume in tooltip
-  * scroll-down/up to decrease/increase volume
+  + show volume in tooltip
+  + scroll-down/up to decrease/increase volume
 
 * CPU:show CPU details in tooltip
 * Mem:show Mem details in tooltip
 * Uptime
 * Mpd: add mpd control 
 
-  * scroll-down/up(next/prev)
-  * left-click(toggle)
-  * right-click(stop)
+  + scroll-down/up(next/prev)
+  + left-click(toggle)
+  + right-click(stop)
 
 Config
 ------
