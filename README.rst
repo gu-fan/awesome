@@ -53,8 +53,8 @@ Requirements
 * print screen : ``import``
 * reboot/shutdown/log out : 
         
-  have ``dbus`` and ``consolekit`` installed
-  add ``exec ck-launch-session awesome`` in ``.xinitrc``
+  have ``dbus`` and ``consolekit`` installed.
+  add ``exec ck-launch-session awesome`` in ``.xinitrc``.
 
   or use ``gnome`` and ``gnome-session``
 
@@ -124,21 +124,23 @@ Widgets
 
 * Volume: volume control 
 
+  + left-click(toggle mute)
+  + wheel-down/up to decrease/increase volume
   + show volume in tooltip
-  + scroll-down/up to decrease/increase volume
 
 * CPU:show CPU details in tooltip
 * Mem:show Mem details in tooltip
 * Uptime
 * Mpd: add mpd control 
 
-  + scroll-down/up(next/prev)
-  + left-click(toggle)
+  + wheel-down/up(next/prev)
+  + left-click(toggle playing)
   + right-click(stop)
 
 Config
 ------
 
+* Change settings in conf.lua
 * More : 
 
   see https://wiki.archlinux.org/index.php/Awesome 

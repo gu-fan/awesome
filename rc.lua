@@ -302,8 +302,8 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- {{{ Wibox widgets
 
 function span(text,color) --{{{
-    color = color or  "Gold"
-    return "<span foreground='".. color .."'> " .. text .. " </span>"
+    color = color or  "White"
+    return "<span font='bold' foreground='".. color .."'> " .. text .. " </span>"
 end --}}}
 
 -- Bottom panel show/hide --{{{
@@ -422,25 +422,64 @@ end,
 -- {{{ Volume widget
 local volwidget = widget({ type = "textbox" })
 --vicious.register(volwidget, vicious.widgets.volume, " $1% ", 1,"Master")
-volwidget.text = span("♫")
+
+volwidget.text = span("")
+function voltext(vol,mute) --{{{
+    -- ' - ♩ ♪ ♫ ♬ '
+    if  mute =="true" then
+        return span("-")
+    else 
+        local v = tonumber(vol)
+        if v >= 100 then
+            return span("♬")
+        elseif v >= 70 then
+            return span("♫")
+        elseif v >= 30 then
+            return span("♪")
+        else
+            return  span("♩")
+        end
+    end
+end --}}}
+function getvol() --{{{
+    local f = io.popen("pamixer --get-mute" )
+    local mute = f:read("*all")
+    f:close()
+    local d = io.popen("pamixer --get-volume" )
+    local vol = d:read("*all")
+    d:close()
+    return vol, mute
+end --}}}
+local vol,mute = getvol()
+volwidget.text = voltext(vol,mute)
 volwidget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function()
+        local vol,mute = getvol()
+        if mute == "true" then
+            exes("pamixer --unmute")
+            m = "false"
+        else
+            exes("pamixer --mute")
+            m = "true"
+        end
+        volwidget.text = voltext(vol, m)
+    end),
     awful.button({ }, 4, function()
         exes("pamixer --increase 4")
-        --vicious.force({ volwidget, })
+        local vol,mute = getvol()
+        volwidget.text = voltext(vol, mute)
     end),
     awful.button({ }, 5, function()
         exes("pamixer --decrease 4")
-        --vicious.force({ volwidget, })
+        local vol,mute = getvol()
+        volwidget.text = voltext(vol, mute)
     end)
 ))
 local volwidget_t  = awful.tooltip({
 objects = { volwidget },
 timer_function = function()
-
-    local f = io.popen("pamixer --get-volume " )
-    local vol = f:read("*all")
-    f:close()
-    return "VOL:"..vol.."\nVol Control:\nScroll Up:\tIncrease\nScroll Down:\tDecrease"
+    local vol,mute = getvol()
+    return "VOL:"..vol.."\nMUTE:"..mute.."\nVol Control:\nScroll Up:\tIncrease\nScroll Down:\tDecrease"
 end,
 })
 -- }}}
@@ -877,6 +916,14 @@ clientkeys = awful.util.table.join( --{{{
             -- minimized, since minimized clients can't have the focus.
             c.minimized = true
         end, "Minimize Client"),
+    awful.key({ modkey,           }, "t",
+        function (c)
+            awful.titlebar.add(c)
+        end, "Titlebar of Client"),
+    awful.key({ modkey,     "Shift"      }, "t",
+        function (c)
+            awful.titlebar.remove(c)
+        end, "Titlebar of Client"),
 
     awful.key({ modkey,           }, "f",      awful.client.floating.toggle                     ),
     awful.key({ modkey,           }, "Return", function (c) c:swap(awful.client.getmaster())   end, "Get Master"),

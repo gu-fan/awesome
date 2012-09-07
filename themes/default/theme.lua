@@ -50,12 +50,12 @@ theme.menu_border_color = "#111111"
 theme.menu_width  = "200"
 
 -- You can use your own command to set your wallpaper
-theme.wallpaper_cmd = { "feh --bg-scale ~/Pictures/wallpaper-1536425.jpg " }
+theme.wallpaper_cmd = { " " }
 
 -- You can add as many variables as
 -- you wish and access them by using
 -- beautiful.variable in your rc.lua
---theme.bg_widget = "#cc0000"
+--theme.bg_widget = "#CC0000"
 
 -- Define the image to load
 theme.titlebar_close_button_normal = "/usr/share/awesome/themes/default/titlebar/close_normal.png"
